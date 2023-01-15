@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h3>Все статьи</h3>
+
+        {% for post in object_list %}
+              <a href="" class="link-secondary">{{ post.cat }}:</a>
+              <a href="{% url 'post-detail' slug=post.slug %}" class="link-dark">{{ post.title }}</a>
+                - {{ post.user }}, {{ post.time_created|date:"d.m.Y H:m" }}.
+              <p>
+                  {{ post.body|striptags|truncatewords:24 }}
+                  <a href="{% url 'post-detail' slug=post.slug %}" class="link-secondary">читать</a>
+              </p>
+            <hr>
+        {% endfor %}
+
+{% endblock %}

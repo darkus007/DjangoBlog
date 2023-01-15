@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h3>{{ object.title }}</h3>
+    <p>{{ post.body|safe }}</p>
+    <hr>
+    <p>{{ object.user }}, {{ post.time_created|date:"d.m.Y H:m" }}.</p>
+    <a onclick="javascript:history.back(); return false;" class="btn btn-dark bg-gradient">На предыдущую</a>
+{% endblock %}
