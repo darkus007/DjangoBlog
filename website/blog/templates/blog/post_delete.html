@@ -1,0 +1,26 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated and user.pk == post.user.pk %}
+
+    <h3>Удалить статью?!</h3>
+    <p>{{ post.body|safe }}</p>
+    <hr>
+    <p>{{ object.user }}, {{ post.time_created|date:"d.m.Y H:m" }}.</p>
+    <div class="row row-cols-auto">
+        <div class="col">
+            <a onclick="javascript:history.back(); return false;" class="btn btn-dark bg-gradient">Не удалять</a>
+        </div>
+        <div class="col">
+            <form method="post" >
+                {% csrf_token %}
+            <button class="btn btn-danger">Удалить!</button>
+            </form>
+        </div>
+    </div>
+
+    {% else %}
+        Авторизуйтесь для удаления статьи
+    {% endif %}
+
+{% endblock %}
