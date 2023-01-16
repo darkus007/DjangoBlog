@@ -9,6 +9,7 @@ class HomeView(ListView):
     model = Post
     template_name = 'blog/home.html'
     ordering = ('-time_created', )
+    paginate_by = 50
 
 
 class PostDetailView(DetailView):
