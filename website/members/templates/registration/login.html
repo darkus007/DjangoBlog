@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h3>Авторизация</h3>
+    <div class="form-group">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Логин</label>
+                <input type="text" class="form-control" name="username" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Пароль</label>
+                <input type="password" class="form-control" name="password">
+            </div>
+            <button class="btn btn-dark bg-gradient">Авторизация</button>
+        </form>
+    </div>
+    <br>
+    <div> Вы не зарегистрированы? Регистрация <a href="{% url 'register' %}">тут...</a></div>
+
+{% endblock %}
