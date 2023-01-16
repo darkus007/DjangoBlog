@@ -8,9 +8,11 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-        <button class="btn btn-dark bg-gradient">Обновить</button>
+        <a onclick="javascript:history.back(); return false;" class="btn btn-dark bg-gradient">Не обновлять</a>
+        <button class="btn btn-secondary bg-gradient">Обновить</button>
         </form>
     </div>
+
 
     {% else %}
         Авторизуйтесь для обновления статьи

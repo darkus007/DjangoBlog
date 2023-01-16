@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .models import Post
-from .forms import AddPostForm
+from .forms import PostForm
 
 
 class HomeView(ListView):
@@ -19,22 +19,21 @@ class PostDetailView(DetailView):
 
 class AddPostView(CreateView):
     model = Post
-    form_class = AddPostForm  # подключаем стилизованную форму
+    form_class = PostForm  # подключаем стилизованную форму
     template_name = 'blog/post_add.html'
-    # fields = '__all__'  # какие поля отображать (уже описаны в AddPostForm)
+    # fields = '__all__'  # какие поля отображать (уже описаны в PostForm)
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         """ Передаем пользователя в форму """
         form.instance.user = self.request.user
-        print(f'{form.instance.user=}')     # проверка
         return super().form_valid(form)
 
 
 class UpdatePostView(UpdateView):
     model = Post
+    form_class = PostForm
     template_name = 'blog/post_update.html'
-    fields = '__all__'
     success_url = reverse_lazy('home')
 
 

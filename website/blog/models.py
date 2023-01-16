@@ -25,7 +25,7 @@ class Post(models.Model):
     title = models.CharField(max_length=255, verbose_name='Наименование поста')
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
     body = models.TextField(verbose_name='Текст поста')
-    time_created = models.DateTimeField(auto_now=True, verbose_name='Время создания')
+    time_created = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
 
     def __str__(self):
         return f'{self.title} - {self.user}'

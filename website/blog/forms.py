@@ -1,10 +1,10 @@
 from django import forms
 
 from website.utilites import slugify
-from .models import Post, Category
+from .models import Post
 
 
-class AddPostForm(forms.ModelForm):
+class PostForm(forms.ModelForm):
 
     def clean_slug(self):
         """
