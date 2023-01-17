@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h1>Редактировать пользователя</h1>
+
+    <div class="form-group">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+        <a href="{% url 'home' %}" class="btn btn-dark bg-gradient">Не обновлять</a>
+        <button class="btn btn-secondary bg-gradient">Обновить профиль</button>
+        </form>
+    </div>
+
+{% endblock %}

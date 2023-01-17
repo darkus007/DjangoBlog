@@ -39,7 +39,8 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                       <li><a class="dropdown-item" href="#">Мой профиль</a></li>
-                      <li><a class="dropdown-item" href="#">Мои статьи</a></li>
+                      <li><a class="dropdown-item" href="{% url 'change-password' %}">Изменить пароль</a></li>
+                      <li><a class="dropdown-item" href="{% url 'edit-user' %}">Редактировать профиль</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
                     </ul>

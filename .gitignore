@@ -1,4 +1,5 @@
 /venv
+/media/*
 .idea
 .DS_Store
 __pycache__
