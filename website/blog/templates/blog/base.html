@@ -38,9 +38,16 @@
                       {{ user.username }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="#">Мой профиль</a></li>
+                        {% if not user.profile.id %}
+                        <li><a class="dropdown-item" href="{% url 'user-profile-create' %}">Создать профиль</a></li>
+                        {% else %}
+                        <li><a class="dropdown-item" href="{% url 'user-profile' slug=user.profile.slug %}">Мой профиль</a></li>
+                        {% endif %}
                       <li><a class="dropdown-item" href="{% url 'change-password' %}">Изменить пароль</a></li>
-                      <li><a class="dropdown-item" href="{% url 'edit-user' %}">Редактировать профиль</a></li>
+                        {% if user.profile.id %}
+                      <li><a class="dropdown-item" href="{% url 'user-profile-update' slug=user.profile.slug %}">Редактировать профиль</a></li>
+                        {% endif %}
+                      <li><a class="dropdown-item" href="{% url 'edit-user' %}">Редактировать пользователя</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
                     </ul>

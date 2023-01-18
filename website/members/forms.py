@@ -2,6 +2,8 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, Password
 from django.contrib.auth.models import User
 from django import forms
 
+from .models import Profile
+
 
 class UserRegistrationForm(UserCreationForm):
     """ Стилизуем форму регистрации пользователя. """
@@ -35,8 +37,8 @@ class EditUserForm(UserChangeForm):
     last_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}),
                                 label='Фамилия')
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}), label='Логин')
-    last_login = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}),
-                                 label='Последний раз был')
+    # last_login = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}),
+    #                              label='Последний раз был')
     # is_superuser = forms.CharField(max_length=100, widget=forms.CheckboxInput(attrs={'class': 'form-check'}),
     #                                label='Суперпользователь')
     # is_staff = forms.CharField(max_length=100, widget=forms.CheckboxInput(attrs={'class': 'form-check'}),
@@ -50,8 +52,7 @@ class EditUserForm(UserChangeForm):
         model = User
         # fields = ('username', 'first_name', 'last_name', 'email', 'password',
         #           'last_login', 'is_superuser', 'is_staff', 'is_active', 'date_joined')
-        fields = ('username', 'first_name', 'last_name', 'email', 'password',
-                  'last_login')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password')
 
 
 class UserPasswordChangeForm(PasswordChangeForm):
@@ -70,3 +71,19 @@ class UserPasswordChangeForm(PasswordChangeForm):
         model = User
         fields = ('old_password', 'new_password1', 'new_password2')
         # fields = '__all__' - что бы вернуть комментарии к паролю, напишем их в шаблоне change-password.html
+
+
+# формы для классов представления Profile:
+class ProfilePageForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'image', 'website_url', 'git_url', 'ya_url', 'vk_url', 'ok_url']
+        widgets = {
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Краткая информация о себе'}),
+            # 'image': forms.ModelChoiceField(attrs={'class': 'form-control'}),
+            'ya_url': forms.TextInput(attrs={'class': 'form-control'}),
+            'vk_url': forms.TextInput(attrs={'class': 'form-control'}),
+            'ok_url': forms.TextInput(attrs={'class': 'form-control'}),
+            'git_url': forms.TextInput(attrs={'class': 'form-control'}),
+            'website_url': forms.TextInput(attrs={'class': 'form-control'}),
+        }

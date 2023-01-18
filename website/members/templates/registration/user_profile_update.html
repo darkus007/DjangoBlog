@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+
+        <h3>Обновить страницу профиля</h3>
+        <div class="form-group">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+            <button class="btn btn-dark bg-gradient">Обновить страницу профиля</button>
+            </form>
+        </div>
+
+    {% else %}
+        <br>
+        <a href="{% url 'login' %}" class="link-primary">Авторизуйтесь</a> для обновления профиля.
+    {% endif %}
+
+{% endblock %}

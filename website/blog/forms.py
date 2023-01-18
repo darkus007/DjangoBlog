@@ -1,7 +1,8 @@
 from django import forms
 
-from website.utilites import slugify
 from .models import Post
+
+from website.utilites import slugify
 
 
 class PostForm(forms.ModelForm):

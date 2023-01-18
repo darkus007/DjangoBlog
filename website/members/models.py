@@ -18,7 +18,7 @@ class Profile(models.Model):
         return str(self.user)
 
     def get_absolute_url(self):
-        return reverse('profile', kwargs={'slug': self.slug})
+        return reverse('user-profile', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name = 'Инфо пользователя "О себе"'

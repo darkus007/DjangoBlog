@@ -1,0 +1,43 @@
+{% extends 'blog/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <h3>Профиль пользователя</h3>
+
+    <div class="card mb-3">
+      <div class="row g-0">
+        <div class="col-md-4">
+            {% if user_profile.image %}
+                <img src="{{ user_profile.image.url }}" class="img-fluid rounded-start">
+            {% else %}
+                <img src="{% static 'members/images/default.jpg' %}" class="img-fluid rounded-start">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}</h5>
+              <p class="card-text"><small class="text-muted">
+                  {% if user_profile.website_url %}
+                    <a href="{{ user_profile.website_url }}" target="_blank">Website</a>
+                  {% endif %}
+                  {% if user_profile.git_url %}
+                    | <a href="{{ user_profile.git_url }}" target="_blank">Git</a>
+                  {% endif %}
+                  {% if user_profile.ya_url %}
+                    | <a href="{{ user_profile.ya_url }}" target="_blank">Яндекс</a>
+                  {% endif %}
+                  {% if user_profile.vk_url %}
+                    | <a href="{{ user_profile.vk_url }}" target="_blank">ВКонтакте</a>
+                  {% endif %}
+                  {% if user_profile.ok_url %}
+                    | <a href="{{ user_profile.ok_url }}" target="_blank">Одноклассники</a>
+                  {% endif %}
+              </small></p>
+              <p class="card-text">{{ user_profile.bio }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
