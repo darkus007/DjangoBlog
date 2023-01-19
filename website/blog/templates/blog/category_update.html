@@ -1,0 +1,19 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated and user.is_staff %}
+
+    <h1>Переименовать категорию</h1>
+    <div class="form-group">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+        <button class="btn btn-dark bg-gradient">Переименовать</button>
+        </form>
+    </div>
+
+    {% else %}
+        Только администраторы сайта могут править категории.
+    {% endif %}
+
+{% endblock %}

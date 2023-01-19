@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h3>Все категории</h3>
+        {% for category in object_list %}
+            <ul>
+                <li>{{ category.title }}
+                {% if user.is_authenticated and user.is_staff %} -
+                <a href="{% url 'category-update' slug=category.slug %}" class="link-primary">Правка</a>
+                | <a href="{% url 'category-delete' slug=category.slug %}" class="link-danger">Удалить</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endfor %}
+{% endblock %}

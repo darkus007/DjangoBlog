@@ -23,10 +23,8 @@
                   Категории
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  <li><a class="dropdown-item" href="{% url 'categories' %}">Все категории</a></li>
+                  <li><a class="dropdown-item" href="{% url 'category-add' %}">Добавить категорию</a></li>
                 </ul>
               </li>
               {% if user.is_authenticated %}

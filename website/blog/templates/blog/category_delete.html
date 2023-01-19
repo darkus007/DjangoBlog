@@ -1,12 +1,12 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    {% if user.is_authenticated and user.pk == post.user.pk %}
+    {% if user.is_authenticated and user.is_staff %}
 
-    <h3>Удалить статью?!</h3>
-    <p>{{ post.body|safe }}</p>
+    <h3>Удалить категорию?!</h3>
+    <p>{{ object.title }}</p>
     <hr>
-    <p>{{ object.user }}, {{ post.time_created|date:"d.m.Y H:m" }}.</p>
+    <p>Посты из удаленной категории будут перемещены в категорию "Разное"</p>
     <div class="row row-cols-auto">
         <div class="col">
             <a onclick="javascript:history.back(); return false;" class="btn btn-dark bg-gradient">Не удалять</a>
@@ -20,7 +20,7 @@
     </div>
 
     {% else %}
-        Авторизуйтесь для удаления статьи.
+        Только администраторы сайта могут удалять категории.
     {% endif %}
 
 {% endblock %}
