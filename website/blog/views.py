@@ -1,5 +1,7 @@
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.db.models import Q
 
 from .models import Post, Category
 from .forms import PostForm, CategoryForm
@@ -85,3 +87,12 @@ class PostsByCategory(ListView):
         context = super().get_context_data(**kwargs)
         context['cat_selected'] = self.kwargs['slug']
         return context
+
+
+def search_blogs(request):
+    if request.method == 'POST':
+        searched = request.POST['searched']     # <input name="searched" ...
+        q = Q(title__icontains=searched) | Q(body__icontains=searched)
+        object_list = Post.objects.filter(q)
+        return render(request, 'blog/post_search.html', {'object_list': object_list, 'search_key': searched})
+    return render(request, 'blog/post_search.html', {})

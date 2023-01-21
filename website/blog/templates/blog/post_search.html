@@ -1,0 +1,33 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+        <h3>Вы искали: {{ search_key }}</h3>
+
+        {% for post in object_list %}
+              <a href="" class="link-secondary">{{ post.cat }}:</a>
+              <a href="{% url 'post-detail' slug=post.slug %}" class="link-dark">{{ post.title }}</a>
+                - {{ post.user }}, {{ post.time_created|date:"d.m.Y H:m" }}.
+              <p>
+                  {{ post.body|striptags|truncatewords:24 }}
+                  <a href="{% url 'post-detail' slug=post.slug %}" class="link-secondary">читать</a>
+              </p>
+            <hr>
+        {% endfor %}
+
+    {% if page_obj.paginator.num_pages > 1 %}
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="btn btn-dark bg-gradient" href="?page=1">&laquo; Первая</a></li>
+            <li class="page-item"><a class="btn btn-dark bg-gradient" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+        {% endif %}
+        <li class="page-item disabled"><a class="btn btn-dark bg-gradient disabled" href="">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</a></li>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="btn btn-dark bg-gradient" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+            <li class="page-item"><a class="btn btn-dark bg-gradient" href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+
+{% endblock %}
