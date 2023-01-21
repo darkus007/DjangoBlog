@@ -1,7 +1,7 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    {% if not cat_selected %}
+    {% if cat_selected == 'all-categories' %}
         <h3>Все статьи</h3>
     {% else %}
         {% if object_list %}

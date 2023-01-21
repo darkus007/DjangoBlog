@@ -3,7 +3,7 @@
 {% block content %}
     {% if user.is_authenticated and user.pk == post.user.pk %}
 
-    <h1>Обновить статью</h1>
+    <h3>Обновить статью</h3>
     <div class="form-group">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}

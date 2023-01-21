@@ -136,3 +136,6 @@ LOGOUT_REDIRECT_URL = 'home'
 # добавляем для указания пути сохранения изображений модели members.models.Profile
 MEDIA_ROOT = path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# Настройка категорий
+ALL_CATEGORIES = {'title': 'Все категории', 'slug': 'all-categories'}

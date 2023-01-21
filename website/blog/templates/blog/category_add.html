@@ -3,7 +3,7 @@
 {% block content %}
     {% if user.is_authenticated and user.is_staff %}
 
-    <h1>Новая категория</h1>
+    <h3>Новая категория</h3>
     <div class="form-group">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}

@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
 
+from website.settings import ALL_CATEGORIES
 from .models import Post, Category
 from .forms import PostForm, CategoryForm
 
@@ -12,6 +13,11 @@ class HomeView(ListView):
     template_name = 'blog/home.html'
     ordering = ('-time_created', )
     paginate_by = 25
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cat_selected'] = ALL_CATEGORIES.get('slug')
+        return context
 
 
 class PostDetailView(DetailView):
@@ -78,7 +84,7 @@ class PostsByCategory(ListView):
     paginate_by = 25
 
     def get_queryset(self):
-        if self.kwargs['slug'] == 'all-categories':
+        if self.kwargs['slug'] == ALL_CATEGORIES.get('slug'):
             return Post.objects.select_related('cat')
         else:
             return Post.objects.select_related('cat').filter(cat__slug=self.kwargs['slug'])
