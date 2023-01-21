@@ -9,7 +9,7 @@ class HomeView(ListView):
     model = Post
     template_name = 'blog/home.html'
     ordering = ('-time_created', )
-    paginate_by = 50
+    paginate_by = 25
 
 
 class PostDetailView(DetailView):
@@ -67,3 +67,21 @@ class DeleteCategoryView(DeleteView):
     model = Category
     template_name = 'blog/category_delete.html'
     success_url = reverse_lazy('categories')
+
+
+class PostsByCategory(ListView):
+    model = Post
+    template_name = 'blog/home.html'
+    ordering = ('-time_created',)
+    paginate_by = 25
+
+    def get_queryset(self):
+        if self.kwargs['slug'] == 'all-categories':
+            return Post.objects.select_related('cat')
+        else:
+            return Post.objects.select_related('cat').filter(cat__slug=self.kwargs['slug'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cat_selected'] = self.kwargs['slug']
+        return context

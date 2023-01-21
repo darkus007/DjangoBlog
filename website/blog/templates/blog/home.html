@@ -1,7 +1,15 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    <h3>Все статьи</h3>
+    {% if not cat_selected %}
+        <h3>Все статьи</h3>
+    {% else %}
+        {% if object_list %}
+        <h3>Статьи в категории "{{ object_list.0.cat }}"</h3>
+        {% else %}
+        <h3>В даной категории еще нет статей</h3>
+        {% endif %}
+    {% endif %}
 
         {% for post in object_list %}
               <a href="" class="link-secondary">{{ post.cat }}:</a>
@@ -14,6 +22,7 @@
             <hr>
         {% endfor %}
 
+    {% if page_obj.paginator.num_pages > 1 %}
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
@@ -27,5 +36,6 @@
         {% endif %}
       </ul>
     </nav>
+    {% endif %}
 
 {% endblock %}

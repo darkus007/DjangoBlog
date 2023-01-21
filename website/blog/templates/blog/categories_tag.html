@@ -1,0 +1,13 @@
+{% if cat_selected %}
+    <li class="list-group-item"><a class="link-dark" href="{% url 'home' %}">{{ all_categories.title }}</a></li>
+{% else %}
+    <li class="list-group-item selected">{{ all_categories.title }}</li>
+{% endif %}
+
+{% for cat in categories %}
+    {% if cat_selected == cat.slug %}
+        <li class="list-group-item selected">{{ cat.title }}</li>
+    {% else %}
+        <li class="list-group-item"><a class="link-dark" href="{% url 'posts_by_category' cat.slug %}">{{ cat.title }}</a></li>
+    {% endif %}
+{% endfor %}

@@ -7,11 +7,11 @@ from .models import Profile
 
 class UserRegistrationForm(UserCreationForm):
     """ Стилизуем форму регистрации пользователя. """
-    username = forms.CharField(max_length=150,
-                               widget=forms.TextInput(attrs={'class': 'form-control',
-                                                             'placeholder': 'Не более 150 символов. Только буквы, '
-                                                                            'цифры и символы @/./+/-/_.'}),
-                               label='Логин пользователя')
+    # username = forms.CharField(max_length=150,
+    #                            widget=forms.TextInput(attrs={'class': 'form-control',
+    #                                                          'placeholder': 'Не более 150 символов. Только буквы, '
+    #                                                                         'цифры и символы @/./+/-/_.'}),
+    #                            label='Логин')
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}),
                                  label='Имя')
@@ -21,6 +21,7 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+        labels = {'username': 'Логин'}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
