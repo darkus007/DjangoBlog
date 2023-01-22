@@ -102,3 +102,18 @@ def search_blogs(request):
         object_list = Post.objects.filter(q)
         return render(request, 'blog/post_search.html', {'object_list': object_list, 'search_key': searched})
     return render(request, 'blog/post_search.html', {})
+
+
+class PostsByUser(ListView):
+    model = Post
+    template_name = 'blog/home.html'
+    ordering = ('-time_created', )
+    paginate_by = 25
+
+    def get_queryset(self):
+        return Post.objects.select_related('cat').filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cat_selected'] = 'user'
+        return context

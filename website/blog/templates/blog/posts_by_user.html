@@ -1,17 +1,13 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    {% if cat_selected == 'user' %}
-        <h3>Записи пользователя {{ user.username }}</h3>
+    {% if cat_selected == 'all-categories' %}
+        <h3>Все статьи</h3>
     {% else %}
-        {% if cat_selected == 'all-categories' %}
-            <h3>Все статьи</h3>
+        {% if object_list %}
+        <h3>Статьи в категории "{{ object_list.0.cat }}"</h3>
         {% else %}
-            {% if object_list %}
-            <h3>Статьи в категории "{{ object_list.0.cat }}"</h3>
-            {% else %}
-            <h3>В даной категории еще нет статей</h3>
-            {% endif %}
+        <h3>В даной категории еще нет статей</h3>
         {% endif %}
     {% endif %}
 
