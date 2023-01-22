@@ -11,8 +11,12 @@ from .forms import PostForm, CategoryForm
 class HomeView(ListView):
     model = Post
     template_name = 'blog/home.html'
-    ordering = ('-time_created', )
+    ordering = ('-time_created',)
     paginate_by = 25
+
+    def get_queryset(self):
+        # return Post.objects.all().select_related('cat', 'user')
+        return Post.objects.values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'cat__slug')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -23,6 +27,11 @@ class HomeView(ListView):
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
+
+    def get_queryset(self):
+        # return Post.objects.filter(slug=self.kwargs['slug']).select_related('cat', 'user')
+        return Post.objects.filter(slug=self.kwargs['slug']) \
+            .values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'user__id')
 
 
 class AddPostView(CreateView):
@@ -44,17 +53,24 @@ class UpdatePostView(UpdateView):
     template_name = 'blog/post_update.html'
     success_url = reverse_lazy('home')
 
+    def get_queryset(self):
+        return Post.objects.filter(slug=self.kwargs['slug']).select_related('cat', 'user')
+
 
 class DeletePostView(DeleteView):
     model = Post
     template_name = 'blog/post_delete.html'
     success_url = reverse_lazy('home')
 
+    def get_queryset(self):
+        return Post.objects.filter(slug=self.kwargs['slug']) \
+            .values('title', 'body', 'time_created', 'user__username', 'user__id')
+
 
 class CategoryView(ListView):
     model = Category
     template_name = 'blog/category_all.html'
-    ordering = ('title', )
+    ordering = ('title',)
 
 
 class AddCategoryView(CreateView):
@@ -84,10 +100,8 @@ class PostsByCategory(ListView):
     paginate_by = 25
 
     def get_queryset(self):
-        if self.kwargs['slug'] == ALL_CATEGORIES.get('slug'):
-            return Post.objects.select_related('cat')
-        else:
-            return Post.objects.select_related('cat').filter(cat__slug=self.kwargs['slug'])
+        return Post.objects.filter(cat__slug=self.kwargs['slug']) \
+            .values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'cat__slug')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -97,9 +111,10 @@ class PostsByCategory(ListView):
 
 def search_blogs(request):
     if request.method == 'POST':
-        searched = request.POST['searched']     # <input name="searched" ...
+        searched = request.POST['searched']  # <input name="searched" ...
         q = Q(title__icontains=searched) | Q(body__icontains=searched)
-        object_list = Post.objects.filter(q)
+        object_list = Post.objects.filter(q) \
+            .values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'cat__slug')
         return render(request, 'blog/post_search.html', {'object_list': object_list, 'search_key': searched})
     return render(request, 'blog/post_search.html', {})
 
@@ -107,11 +122,12 @@ def search_blogs(request):
 class PostsByUser(ListView):
     model = Post
     template_name = 'blog/home.html'
-    ordering = ('-time_created', )
+    ordering = ('-time_created',)
     paginate_by = 25
 
     def get_queryset(self):
-        return Post.objects.select_related('cat').filter(user=self.request.user)
+        return Post.objects.filter(user=self.request.user) \
+            .values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'cat__slug')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

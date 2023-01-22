@@ -20,8 +20,8 @@ class Category(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', verbose_name='Автор поста')
-    cat = models.ForeignKey(Category, on_delete=models.SET(1),
-                            related_name='category', verbose_name='Категория')  # первая кат-рия будет "Разное"
+    cat = models.ForeignKey(Category, on_delete=models.SET(1),  # первая кат-рия будет "Разное"
+                            related_name='category', verbose_name='Категория')
     title = models.CharField(max_length=255, verbose_name='Название поста')
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
     body = models.TextField(verbose_name='Текст поста')

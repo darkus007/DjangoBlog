@@ -10,5 +10,5 @@ register = template.Library()   # через него происходит ре�
 
 @register.inclusion_tag('blog/categories_tag.html')
 def show_categories(cat_selected=None):
-    categories = Category.objects.all()
+    categories = Category.objects.values('title', 'slug')
     return {'categories': categories, 'cat_selected': cat_selected, 'all_categories': ALL_CATEGORIES}

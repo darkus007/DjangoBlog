@@ -8,7 +8,7 @@
             <h3>Все статьи</h3>
         {% else %}
             {% if object_list %}
-            <h3>Статьи в категории "{{ object_list.0.cat }}"</h3>
+            <h3>Статьи в категории "{{ object_list.0.cat__title }}"</h3>
             {% else %}
             <h3>В даной категории еще нет статей</h3>
             {% endif %}
@@ -16,9 +16,9 @@
     {% endif %}
 
         {% for post in object_list %}
-              <a href="" class="link-secondary">{{ post.cat }}:</a>
+              <a href="{% url 'posts-by-category' slug=post.cat__slug %}" class="link-secondary">{{ post.cat__title }}:</a>
               <a href="{% url 'post-detail' slug=post.slug %}" class="link-dark">{{ post.title }}</a>
-                - {{ post.user }}, {{ post.time_created|date:"d.m.Y H:m" }}.
+                - {{ post.user__username }}, {{ post.time_created|date:"d.m.Y H:m" }}.
               <p>
                   {{ post.body|striptags|truncatewords:24 }}
                   <a href="{% url 'post-detail' slug=post.slug %}" class="link-secondary">читать</a>
