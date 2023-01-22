@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    "debug_toolbar",   # django-debug-toolbar
+
     'blog.apps.BlogConfig',
     'members.apps.MembersConfig',
 ]
@@ -51,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    "debug_toolbar.middleware.DebugToolbarMiddleware",     # django-debug-toolbar
 ]
 
 ROOT_URLCONF = 'website.urls'
@@ -114,6 +118,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+INTERNAL_IPS = [         # django-debug-toolbar
+    "127.0.0.1",
+]
 
 
 # Static files (CSS, JavaScript, Images)
