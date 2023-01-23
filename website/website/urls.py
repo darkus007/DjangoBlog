@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('blog.urls')),
     path('members/', include('django.contrib.auth.urls')),
     path('members/', include('members.urls')),
+    path('captcha/', include('captcha.urls')),
 ]
 
 # добавляем для построения пути к статическим файлам (картинки в профайле)

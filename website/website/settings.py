@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     "debug_toolbar",   # django-debug-toolbar
+    "captcha",
 
     'blog.apps.BlogConfig',
     'members.apps.MembersConfig',

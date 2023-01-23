@@ -1,11 +1,16 @@
 from django import forms
 
+from captcha.fields import CaptchaField
+
 from .models import Post, Category
 
 from website.utilites import slugify
 
 
 class PostForm(forms.ModelForm):
+
+    captcha = CaptchaField(label='Введите текст с картинки',
+                           error_messages={'invalid': 'Неверно указан текст с картинки'})
 
     def clean_slug(self):
         """
@@ -16,7 +21,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ('cat', 'title', 'slug', 'body')
+        fields = ('cat', 'title', 'slug', 'body', 'captcha')
 
         widgets = {
             # 'user': forms.Select(attrs={'class': 'form-control'}),
