@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
 
@@ -35,6 +36,29 @@ class PostDetailView(DetailView):
                     'user__first_name', 'user__last_name', 'user__profile__image', 'user__profile__website_url',
                     'user__profile__git_url', 'user__profile__ya_url', 'user__profile__vk_url', 'user__profile__ok_url',
                     'user__profile__bio')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = get_object_or_404(Post, slug=self.kwargs['slug'])
+        total_likes = post.total_likes()
+
+        liked = False
+        if post.likes.filter(pk=self.request.user.id).exists():
+            liked = True
+
+        context['total_likes'] = total_likes
+        context['liked'] = liked
+        return context
+    
+
+def like_post(requests, slug):
+    post = get_object_or_404(Post, slug=requests.POST.get('post_slug'))  # <button type="submit" name="post_slug" ...
+    if post.likes.filter(pk=requests.user.id).exists():
+        post.likes.remove(requests.user)
+    else:
+        post.likes.add(requests.user)
+    # перенаправление на ту же страницу
+    return HttpResponseRedirect(reverse('post-detail', kwargs={'slug': slug}))
 
 
 class AddPostView(CreateView):

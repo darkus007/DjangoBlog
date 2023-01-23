@@ -56,6 +56,33 @@
     </div>
 
     <br>
-    <a onclick="javascript:history.back(); return false;" class="btn btn-dark bg-gradient">На предыдущую</a>
+
+    <div class="container text-center">
+      <div class="row">
+        <div class="col">
+            <button onclick="javascript:history.back(); return false;" class="btn btn-dark bg-gradient">На предыдущую</button>
+        </div>
+        <div class="col d-flex justify-content-center">
+          Статья понравилась {{ total_likes }} пользователям.
+        </div>
+        <div class="col d-flex justify-content-center">
+          <!-- Like post -->
+            {% if user.is_authenticated %}
+                <br><br>
+                <form action="{% url 'like-post' object.slug %}" method="post">
+                    {% csrf_token %}
+
+                    {% if liked %}
+                        <button type="submit" name="post_slug" value="{{ object.slug }}" class="btn btn-secondary bg-gradient">Больше не нравится!</button>
+                    {% else %}
+                        <button type="submit" name="post_slug" value="{{ object.slug }}" class="btn btn-success">Нравится!</button>
+                    {% endif %}
+                </form>
+            {% else %}
+                <p><a href="{% url 'login' %}">Авторизуйтесь</a> для оценки статьи.</p>
+            {% endif %}
+        </div>
+      </div>
+    </div>
     <br><br>
 {% endblock %}

@@ -26,6 +26,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
     body = models.TextField(verbose_name='Текст поста')
     time_created = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+    likes = models.ManyToManyField(User, related_name='like')
 
     def __str__(self):
         return f'{self.title} - {self.user}'
@@ -39,6 +40,9 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'slug': self.slug})
+
+    def total_likes(self):
+        return self.likes.count()
 
     class Meta:
         verbose_name = 'Пост'

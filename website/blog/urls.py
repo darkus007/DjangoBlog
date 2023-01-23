@@ -1,7 +1,8 @@
 from django.urls import path
 
 from blog.views import HomeView, PostDetailView, AddPostView, UpdatePostView, DeletePostView, \
-    CategoryView, AddCategoryView, UpdateCategoryView, DeleteCategoryView, PostsByCategory, search_blogs, PostsByUser
+    CategoryView, AddCategoryView, UpdateCategoryView, DeleteCategoryView, PostsByCategory, PostsByUser, \
+    search_blogs, like_post
 
 
 urlpatterns = [
@@ -16,7 +17,9 @@ urlpatterns = [
 
     path('categories/', CategoryView.as_view(), name='categories'),
     path('add-category/', AddCategoryView.as_view(), name='category-add'),
-    path('update-category/<slug:slug>', UpdateCategoryView.as_view(), name='category-update'),
-    path('delete-category/<slug:slug>', DeleteCategoryView.as_view(), name='category-delete'),
-    path('category/<slug:slug>', PostsByCategory.as_view(), name='posts-by-category'),
+    path('update-category/<slug:slug>/', UpdateCategoryView.as_view(), name='category-update'),
+    path('delete-category/<slug:slug>/', DeleteCategoryView.as_view(), name='category-delete'),
+    path('category/<slug:slug>/', PostsByCategory.as_view(), name='posts-by-category'),
+
+    path('like/<slug:slug>/', like_post, name='like-post'),
 ]
