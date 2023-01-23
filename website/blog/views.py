@@ -31,7 +31,10 @@ class PostDetailView(DetailView):
     def get_queryset(self):
         # return Post.objects.filter(slug=self.kwargs['slug']).select_related('cat', 'user')
         return Post.objects.filter(slug=self.kwargs['slug']) \
-            .values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'user__id')
+            .values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'user__id',
+                    'user__first_name', 'user__last_name', 'user__profile__image', 'user__profile__website_url',
+                    'user__profile__git_url', 'user__profile__ya_url', 'user__profile__vk_url', 'user__profile__ok_url',
+                    'user__profile__bio')
 
 
 class AddPostView(CreateView):

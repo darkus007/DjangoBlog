@@ -130,7 +130,7 @@ INTERNAL_IPS = [         # django-debug-toolbar
 STATIC_URL = 'static/'
 # добавляем для построения пути к статическим файлам (картинки в профайле)
 STATIC_ROOT = path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = []
+STATICFILES_DIRS = ['media/']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

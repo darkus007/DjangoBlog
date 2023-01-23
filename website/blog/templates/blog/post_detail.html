@@ -1,15 +1,61 @@
 {% extends 'blog/base.html' %}
 
+{% load static %}
+
 {% block content %}
     <h3>{{ object.title }}</h3>
     <p>{{ object.body|safe }}</p>
-    <hr>
-    <p>
-        {{ object.user__username }}, {{ object.time_created|date:"d.m.Y H:m" }}.
+    <div class="d-flex justify-content-end mb-3">
         {% if user.pk == object.user__id %}
-            <a href="{% url 'post-update' slug=object.slug %}" class="link-primary">Правка</a>
-            <a href="{% url 'post-delete' slug=object.slug %}" class="link-danger">Удалить</a>
+            <div class="p-2 bd-highlight"><a href="{% url 'post-update' slug=object.slug %}" class="link-primary">Правка</a></div>
+            <div class="p-2 bd-highlight"><a href="{% url 'post-delete' slug=object.slug %}" class="link-danger">Удалить</a></div>
         {% endif %}
-    </p>
+        <div class="p-2 bd-highlight">{{ object.time_created|date:"d.m.Y H:m" }}</div>
+    </div>
+    <hr>
+
+<!-- Информация об авторе статьи из model.Profile -->
+    <div >
+      <div class="row g-0">
+        <div class="col-md-2">
+            {% if object.user__profile__image %}
+                <img src="{% static object.user__profile__image %}" class="img-fluid rounded-start">
+            {% else %}
+                <img src="{% static 'members/images/default.jpg' %}" class="img-fluid rounded-start">
+            {% endif %}
+        </div>
+        <div class="col-md-10">
+          <div class="card-body">
+              <div>
+                Автор статьи:
+                <h5 class="card-title">{{ object.user__first_name }} {{ object.user__last_name }}</h5>
+              </div>
+              <p class="card-text"><small class="text-muted">
+                  {% if object.user__profile__website_url %}
+                    <a href="{{ object.user__profile__website_url }}" target="_blank">Website</a>
+                  {% endif %}
+                  {% if object.user__profile__git_url %}
+                    | <a href="{{ object.user__profile__git_url }}" target="_blank">Git</a>
+                  {% endif %}
+                  {% if object.user__profile__ya_url %}
+                    | <a href="{{ object.user__profile__ya_url }}" target="_blank">Яндекс</a>
+                  {% endif %}
+                  {% if object.user__profile__vk_url %}
+                    | <a href="{{ object.user__profile__vk_url }}" target="_blank">ВКонтакте</a>
+                  {% endif %}
+                  {% if object.user__profile__ok_url %}
+                    | <a href="{{ object.user__profile__ok_url }}" target="_blank">Одноклассники</a>
+                  {% endif %}
+              </small></p>
+              {% if object.user__profile__bio %}
+                <p class="card-text">{{ object.user__profile__bio }}</p>
+              {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
     <a onclick="javascript:history.back(); return false;" class="btn btn-dark bg-gradient">На предыдущую</a>
+    <br><br>
 {% endblock %}
