@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h3>{{ title }}</h3>
+
+    <div class="form-group">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% if extra_link %}
+                <a href="{% url 'home' %}" class="btn btn-dark bg-gradient">Не обновлять</a>
+            {% endif %}
+        <button class="btn btn-secondary bg-gradient">{{ button }}</button>
+        </form>
+    </div>
+
+{% endblock %}

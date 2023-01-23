@@ -1,26 +1,9 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-    {% if cat_selected == 'all-categories' %}
-        <h3>Все статьи</h3>
-    {% else %}
-        {% if object_list %}
-        <h3>Статьи в категории "{{ object_list.0.cat }}"</h3>
-        {% else %}
-        <h3>В даной категории еще нет статей</h3>
-        {% endif %}
-    {% endif %}
 
-        {% for post in object_list %}
-              <a href="" class="link-secondary">{{ post.cat }}:</a>
-              <a href="{% url 'post-detail' slug=post.slug %}" class="link-dark">{{ post.title }}</a>
-                - {{ post.user }}, {{ post.time_created|date:"d.m.Y H:m" }}.
-              <p>
-                  {{ post.body|striptags|truncatewords:24 }}
-                  <a href="{% url 'post-detail' slug=post.slug %}" class="link-secondary">читать</a>
-              </p>
-            <hr>
-        {% endfor %}
+    {% block subcontent %}
+    {% endblock %}
 
     {% if page_obj.paginator.num_pages > 1 %}
     <nav aria-label="Page navigation example">

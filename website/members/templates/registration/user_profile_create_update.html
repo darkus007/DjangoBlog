@@ -4,18 +4,18 @@
 
     {% if user.is_authenticated %}
 
-        <h3>Обновить страницу профиля</h3>
+        <h3>{{ title }}</h3>
         <div class="form-group">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
-            <button class="btn btn-dark bg-gradient">Обновить страницу профиля</button>
+            <button class="btn btn-dark bg-gradient">{{ button }}</button>
             </form>
         </div>
 
     {% else %}
         <br>
-        <a href="{% url 'login' %}" class="link-primary">Авторизуйтесь</a> для обновления профиля.
+        <a href="{% url 'login' %}" class="link-primary">Авторизуйтесь</a> {{ extra_msg }}
     {% endif %}
 
 {% endblock %}
