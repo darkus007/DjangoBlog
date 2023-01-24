@@ -11,6 +11,8 @@
 
 Полный список можно посмотреть в фале 'requirements.txt'.
 
+База данных [SQLite3](https://www.sqlite.org/index.html).
+
 ### Описание Models
 ##### Приложение "blog"
 > Category - категории для группировки статей.
@@ -45,11 +47,19 @@
 
 #### Локально на Вашем устройстве (используя отладочный сервер)
 Приложение написано на [Python v.3.11](https://www.python.org). 
-1. Скачайте Django Blog на Ваше устройство любым удобным способом (например Code -> Download ZIP, распакуйте архив).
+1. Скачайте DjangoBlog на Ваше устройство любым удобным способом (например Code -> Download ZIP, распакуйте архив).
 2. Установите [Python](https://www.python.org), если он у Вас еще не установлен.
 3. Установите необходимые для работы приложения модули. Для этого откройте терминал, перейдите в каталог с приложением (cd <путь к приложению>/DjangoBlog),
 выполните команду `pip3 install -r requirements.txt`. Если Вы пользователь Microsoft Windows, то вместо `pip3 install ...` следует использовать  `pip install -r requirements.txt`
-4. Установите [переменные окружения](https://wiki.archlinux.org/title/Environment_variables_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)) SECRET_KEY, например выполнив в терминале 
-`export SECRET_KEY="ваш_сложный_секретный_ключ"`.
-5. Для запуска приложения локально на Вашем устройстве перейдите в папку `website` (`cd website` или `dir website`) выполните команду `python3 manage.py runserver` (Для Microsoft Windows `python manage.py runserver`).
+4. Установите [переменную окружения](https://wiki.archlinux.org/title/Environment_variables_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)) `SECRET_KEY`, например выполнив в терминале 
+`export SECRET_KEY="ваш_сложный_секретный_ключ_djang"`.
+5. Для запуска приложения локально на Вашем устройстве перейдите в папку `website` (`cd website` или `dir website` для Windows) выполните команду `python3 manage.py runserver` (Для Microsoft Windows `python manage.py runserver`).
 6. Откройте любимый Веб-браузер и перейдите по адресу http://127.0.0.1:8000/
+#### В контейнере Docker (используя отладочный сервер)
+1. Скачайте FlaskBlog на Ваше устройство любым удобным способом (например Code -> Download ZIP, распакуйте архив).
+2. Установите [Docker](https://www.docker.com/), если он у Вас еще не установлен.
+3. Откройте терминал, перейдите в каталог с приложением (cd <путь к приложению>/DjangoBlog).
+4. В Dockerfile установите Ваши значения переменных окружения `SECRET_KEY`, `DJANGO_SUPERUSER_PASSWORD`, `DJANGO_SUPERUSER_EMAIL` и `DJANGO_SUPERUSER_USERNAME`.
+5. Выполните сборку Docker образа (image) `docker build -t django_blog .`.
+6. Запустите контейнер `docker run -p 8000:8000 -d django_blog`.
+7. Откройте любимый Веб-браузер и перейдите по адресу http://127.0.0.1:8000/
