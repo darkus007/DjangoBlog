@@ -1,4 +1,5 @@
 {% load blog_tags %}
+{% load cache %}
 <!doctype html>
 <html lang="ru">
 <head>
@@ -20,15 +21,15 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Категории
-                </a>
+                <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Категории</a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li><a class="dropdown-item" href="{% url 'categories' %}">Все категории</a></li>
                   <li><a class="dropdown-item" href="{% url 'category-add' %}">Добавить категорию</a></li>
                 </ul>
               </li>
+
               {% if user.is_authenticated %}
+                {% get_user_profile user as user_profile %}
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{% url 'post-add' %}">Добавить статью</a>
                 </li>
@@ -37,19 +38,17 @@
                       {{ user.username }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {% if not user.profile.id %}
-                        <li><a class="dropdown-item" href="{% url 'user-profile-create' %}">Создать профиль</a></li>
+                        {% if user_profile.0.slug %}
+                            <li><a class="dropdown-item" href="{% url 'user-posts' %}">Мои статьи</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user-profile' slug=user_profile.0.slug %}">Мой профиль</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user-profile-update' slug=user_profile.0.slug %}">Редактировать профиль</a></li>
                         {% else %}
-                        <li><a class="dropdown-item" href="{% url 'user-posts' %}">Мои статьи</a></li>
-                        <li><a class="dropdown-item" href="{% url 'user-profile' slug=user.profile.slug %}">Мой профиль</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user-profile-create' %}">Создать профиль</a></li>
                         {% endif %}
-                      <li><a class="dropdown-item" href="{% url 'change-password' %}">Изменить пароль</a></li>
-                        {% if user.profile.id %}
-                      <li><a class="dropdown-item" href="{% url 'user-profile-update' slug=user.profile.slug %}">Редактировать профиль</a></li>
-                        {% endif %}
-                      <li><a class="dropdown-item" href="{% url 'edit-user' %}">Редактировать пользователя</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                        <li><a class="dropdown-item" href="{% url 'edit-user' %}">Редактировать пользователя</a></li>
+                        <li><a class="dropdown-item" href="{% url 'change-password' %}">Изменить пароль пользователя</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
                     </ul>
                 </li>
                {% else %}

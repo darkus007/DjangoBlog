@@ -49,10 +49,8 @@
 Приложение написано на [Python v.3.11](https://www.python.org). 
 1. Скачайте DjangoBlog на Ваше устройство любым удобным способом (например Code -> Download ZIP, распакуйте архив).
 2. Установите [Python](https://www.python.org), если он у Вас еще не установлен.
-3. Установите необходимые для работы приложения модули. Для этого откройте терминал, перейдите в каталог с приложением (cd <путь к приложению>/DjangoBlog),
-выполните команду `pip3 install -r requirements.txt`. Если Вы пользователь Microsoft Windows, то вместо `pip3 install ...` следует использовать  `pip install -r requirements.txt`
-4. Установите [переменную окружения](https://wiki.archlinux.org/title/Environment_variables_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)) `SECRET_KEY`, например выполнив в терминале 
-`export SECRET_KEY="ваш_сложный_секретный_ключ_djang"`.
+3. Установите необходимые для работы приложения модули. Для этого откройте терминал, перейдите в каталог с приложением (cd <путь к приложению>/DjangoBlog), выполните команду `pip3 install -r requirements.txt`. Если Вы пользователь Microsoft Windows, то вместо `pip3 install ...` следует использовать  `pip install -r requirements.txt`
+4. Установите [переменную окружения](https://wiki.archlinux.org/title/Environment_variables_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)) `SECRET_KEY`, например выполнив в терминале `export SECRET_KEY="ваш_сложный_секретный_ключ_djang"`.
 5. Для запуска приложения локально на Вашем устройстве перейдите в папку `website` (`cd website` или `dir website` для Windows) выполните команду `python3 manage.py runserver` (Для Microsoft Windows `python manage.py runserver`).
 6. Откройте любимый Веб-браузер и перейдите по адресу http://127.0.0.1:8000/
 #### В контейнере Docker (используя отладочный сервер)
@@ -63,3 +61,8 @@
 5. Выполните сборку Docker образа (image) `docker build -t django_blog .`.
 6. Запустите контейнер `docker run -p 8000:8000 -d django_blog`.
 7. Откройте любимый Веб-браузер и перейдите по адресу http://127.0.0.1:8000/
+
+### Настройка приложения
+Откройте файл `website/website/settings.py` \
+`PAGINATE_BY_CONST = 25` - задает сколько постов будет отображаться на странице. \
+`ALL_CATEGORIES = {'title': 'Все категории', 'slug': 'all-categories'}` - задает название для всех категорий, сейчас установлено "Все категории", можно поменять только его, slug менять необязательно.

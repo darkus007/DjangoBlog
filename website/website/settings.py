@@ -146,5 +146,20 @@ LOGOUT_REDIRECT_URL = 'home'
 MEDIA_ROOT = path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# Настройка категорий
+# Настройка проекта
+PAGINATE_BY_CONST = 25
 ALL_CATEGORIES = {'title': 'Все категории', 'slug': 'all-categories'}
+
+# Настраиваем кэширование
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 300,     # время хранения кэша (300 секунд (5 минут) - по умолчанию)
+        'OPTIONS': {
+            'MAX_ENTRIES': 300,     # количество записей кэша (300 - по умолчанию)
+            'CULL_FREQUENCY': 2,    # часть кэша, которая будет очищена (0 - весь кэш, 2 - половина, 3 - треть ...)
+        }
+    }
+}
+
+

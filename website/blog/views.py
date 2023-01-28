@@ -2,9 +2,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.db.models import Q
+from django.db.models import Q, Count
 
-from website.settings import ALL_CATEGORIES
+from website.settings import ALL_CATEGORIES, PAGINATE_BY_CONST
 from .models import Post, Category
 from .forms import PostForm, CategoryForm
 
@@ -13,7 +13,7 @@ class HomeView(ListView):
     model = Post
     template_name = 'blog/home.html'
     ordering = ('-time_created',)
-    paginate_by = 25
+    paginate_by = PAGINATE_BY_CONST
 
     def get_queryset(self):
         # return Post.objects.all().select_related('cat', 'user')
@@ -124,7 +124,7 @@ class PostsByCategory(ListView):
     model = Post
     template_name = 'blog/home.html'
     ordering = ('-time_created',)
-    paginate_by = 25
+    paginate_by = PAGINATE_BY_CONST
 
     def get_queryset(self):
         return Post.objects.filter(cat__slug=self.kwargs['slug']) \
@@ -150,7 +150,7 @@ class PostsByUser(ListView):
     model = Post
     template_name = 'blog/home.html'
     ordering = ('-time_created',)
-    paginate_by = 25
+    paginate_by = PAGINATE_BY_CONST
 
     def get_queryset(self):
         return Post.objects.filter(user=self.request.user) \
