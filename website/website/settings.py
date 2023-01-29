@@ -16,7 +16,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -28,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    "debug_toolbar",   # django-debug-toolbar
+    "debug_toolbar",  # django-debug-toolbar
     "captcha",
 
     'blog.apps.BlogConfig',
@@ -55,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    "debug_toolbar.middleware.DebugToolbarMiddleware",     # django-debug-toolbar
+    "debug_toolbar.middleware.DebugToolbarMiddleware",  # django-debug-toolbar
 ]
 
 ROOT_URLCONF = 'website.urls'
@@ -78,7 +76,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'website.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -88,7 +85,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -108,7 +104,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -120,10 +115,9 @@ USE_I18N = True
 
 USE_TZ = True
 
-INTERNAL_IPS = [         # django-debug-toolbar
+INTERNAL_IPS = [  # django-debug-toolbar
     "127.0.0.1",
 ]
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -149,17 +143,34 @@ MEDIA_URL = '/media/'
 # Настройка проекта
 PAGINATE_BY_CONST = 25
 ALL_CATEGORIES = {'title': 'Все категории', 'slug': 'all-categories'}
+EMAIL_THEME_CHOICES = (
+    ('Общее', 'Общее'),
+    ('Добавить категорию', 'Добавить категорию'),
+    ('Предложение по улучшению сайта', 'Предложение по улучшению сайта'),
+    ('Ошибка на сайте', 'Ошибка на сайте'),
+)
 
 # Настраиваем кэширование
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'TIMEOUT': 300,     # время хранения кэша (300 секунд (5 минут) - по умолчанию)
+        'TIMEOUT': 300,  # время хранения кэша (300 секунд (5 минут) - по умолчанию)
         'OPTIONS': {
-            'MAX_ENTRIES': 300,     # количество записей кэша (300 - по умолчанию)
-            'CULL_FREQUENCY': 2,    # часть кэша, которая будет очищена (0 - весь кэш, 2 - половина, 3 - треть ...)
+            'MAX_ENTRIES': 300,  # количество записей кэша (300 - по умолчанию)
+            'CULL_FREQUENCY': 2,  # часть кэша, которая будет очищена (0 - весь кэш, 2 - половина, 3 - треть ...)
         }
     }
 }
 
-
+# настраиваем отправку писем
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # выводит в командной строке
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # отправляет на почтовый сервер
+DEFAULT_FROM_EMAIL = 'blog@mail.ru'  # адрес отправителя по умолчанию
+EMAIL_HOST = 'localhost'  # адрес SMTP-сервера, 'localhost' - по умолчанию
+EMAIL_PORT = 1025  # порт SMTP-сервера
+# EMAIL_HOST_USER = 'user'                                         # логин для SMTP-сервера, по умолчанию пустая строка
+# EMAIL_HOST_PASSWORD = 'password'                                 # пароль для SMTP-сервера, по умолчанию пустая строка
+ADMINS = [  # админы, которым будут отправлены письма методом mail_admins
+    ('admin', 'admin@mail.ru'),
+]
+SERVER_EMAIL = 'from@email.ru'  # адрес почты с которой будут отправлены письма

@@ -27,7 +27,6 @@
                   <li><a class="dropdown-item" href="{% url 'category-add' %}">Добавить категорию</a></li>
                 </ul>
               </li>
-
               {% if user.is_authenticated %}
                 {% get_user_profile user as user_profile %}
                 <li class="nav-item">
@@ -41,6 +40,7 @@
                         {% if user_profile.0.slug %}
                             <li><a class="dropdown-item" href="{% url 'user-posts' %}">Мои статьи</a></li>
                             <li><a class="dropdown-item" href="{% url 'user-profile' slug=user_profile.0.slug %}">Мой профиль</a></li>
+                            <li><a class="dropdown-item" href="{% url 'send-email' %}">Обратная связь</a></li>
                             <li><a class="dropdown-item" href="{% url 'user-profile-update' slug=user_profile.0.slug %}">Редактировать профиль</a></li>
                         {% else %}
                             <li><a class="dropdown-item" href="{% url 'user-profile-create' %}">Создать профиль</a></li>

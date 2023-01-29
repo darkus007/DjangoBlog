@@ -2,7 +2,7 @@ from django.urls import path
 
 from blog.views import HomeView, PostDetailView, AddPostView, UpdatePostView, DeletePostView, \
     CategoryView, AddCategoryView, UpdateCategoryView, DeleteCategoryView, PostsByCategory, PostsByUser, \
-    search_blogs, like_post
+    search_blogs, like_post, send_email_to_staff, send_email_to_staff_success
 
 
 urlpatterns = [
@@ -22,4 +22,7 @@ urlpatterns = [
     path('category/<slug:slug>/', PostsByCategory.as_view(), name='posts-by-category'),
 
     path('like/<slug:slug>/', like_post, name='like-post'),
+
+    path('email/', send_email_to_staff, name='send-email'),
+    path('email-success/', send_email_to_staff_success, name='send-email-success'),
 ]

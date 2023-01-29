@@ -1,12 +1,13 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.db.models import Q, Count
+from django.db.models import Q
+from django.core.mail import EmailMessage, mail_admins, send_mail
 
 from website.settings import ALL_CATEGORIES, PAGINATE_BY_CONST
 from .models import Post, Category
-from .forms import PostForm, CategoryForm
+from .forms import PostForm, CategoryForm, SendToStaffForm
 
 
 class HomeView(ListView):
@@ -160,3 +161,33 @@ class PostsByUser(ListView):
         context = super().get_context_data(**kwargs)
         context['cat_selected'] = 'user'
         return context
+
+
+def send_email_to_staff(request):
+    if request.method == 'POST':
+        form = SendToStaffForm(request.POST)
+        if form.is_valid():
+
+            # email = EmailMessage(subject=form.cleaned_data['title'],
+            #                      body=form.cleaned_data['body'],
+            #                      to=[request.user.email])
+            # email.send()
+
+            # send_mail('Тема сообщения', 'Само сообщение',
+            #           from_email='from@email.ru',
+            #           recipient_list=['to@email.ru'],
+            #           fail_silently=False, connection=None, html_message=None)
+
+            msg = form.cleaned_data['body'] + '\n' + request.user.email
+            mail_admins(form.cleaned_data['title'], msg,
+                        fail_silently=False, connection=None, html_message=None)
+
+            return redirect('send-email-success')
+    else:
+        form = SendToStaffForm()
+
+    return render(request, 'blog/send_email.html', {'form': form})
+
+
+def send_email_to_staff_success(request):
+    return render(request, 'blog/send_email_success.html')

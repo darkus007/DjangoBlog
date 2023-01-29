@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+
+    <h3>Обращение к администратору сайта</h3>
+    <div class="form-group">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+        <a href="{% url 'home' %}" class="btn btn-dark bg-gradient">Не отправлять</a>
+        <button class="btn btn-secondary bg-gradient">Отправить</button>
+        </form>
+    </div>
+
+    {% else %}
+        Авторизуйтесь для отправки сообщения.
+    {% endif %}
+
+{% endblock %}

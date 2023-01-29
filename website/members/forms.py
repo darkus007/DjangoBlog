@@ -78,8 +78,8 @@ class UserPasswordChangeForm(PasswordChangeForm):
         # fields = '__all__' - что бы вернуть комментарии к паролю, напишем их в шаблоне change-password.html
 
 
-# формы для классов представления Profile:
 class ProfilePageForm(forms.ModelForm):
+    """ Формы для классов представления Profile """
     class Meta:
         model = Profile
         fields = ['bio', 'image', 'website_url', 'git_url', 'ya_url', 'vk_url', 'ok_url']

@@ -14,9 +14,10 @@
                 <input type="password" class="form-control" name="password">
             </div>
             <button class="btn btn-dark bg-gradient">Авторизация</button>
+            <a href="#" class="link-dark px-4">Забыли пароль?</a>
         </form>
     </div>
     <br>
-    <div> Вы не зарегистрированы? Регистрация <a href="{% url 'register' %}">тут...</a></div>
+    <div> Вы не зарегистрированы? Регистрация <a href="{% url 'register' %}" class="link-dark">тут...</a></div>
 
 {% endblock %}
