@@ -8,33 +8,33 @@
     <div class="card mb-3">
       <div class="row g-0">
         <div class="col-md-4">
-            {% if user_profile.image %}
-                <img src="{{ user_profile.image.url }}" class="img-fluid rounded-start">
+            {% if object.image %}
+                <img src="{% static object.image %}" class="img-fluid rounded-start">
             {% else %}
                 <img src="{% static 'members/images/default.jpg' %}" class="img-fluid rounded-start">
             {% endif %}
         </div>
         <div class="col-md-8">
           <div class="card-body">
-            <h5 class="card-title">{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}</h5>
+            <h5 class="card-title">{{ object.user__first_name }} {{ object.user__last_name }}</h5>
               <p class="card-text"><small class="text-muted">
-                  {% if user_profile.website_url %}
-                    <a href="{{ user_profile.website_url }}" target="_blank">Website</a>
+                  {% if object.website_url %}
+                    <a href="{{ object.website_url }}" target="_blank">Website</a>
                   {% endif %}
-                  {% if user_profile.git_url %}
-                    | <a href="{{ user_profile.git_url }}" target="_blank">Git</a>
+                  {% if object.git_url %}
+                    | <a href="{{ object.git_url }}" target="_blank">Git</a>
                   {% endif %}
-                  {% if user_profile.ya_url %}
-                    | <a href="{{ user_profile.ya_url }}" target="_blank">Яндекс</a>
+                  {% if object.ya_url %}
+                    | <a href="{{ object.ya_url }}" target="_blank">Яндекс</a>
                   {% endif %}
-                  {% if user_profile.vk_url %}
-                    | <a href="{{ user_profile.vk_url }}" target="_blank">ВКонтакте</a>
+                  {% if object.vk_url %}
+                    | <a href="{{ object.vk_url }}" target="_blank">ВКонтакте</a>
                   {% endif %}
-                  {% if user_profile.ok_url %}
-                    | <a href="{{ user_profile.ok_url }}" target="_blank">Одноклассники</a>
+                  {% if object.ok_url %}
+                    | <a href="{{ object.ok_url }}" target="_blank">Одноклассники</a>
                   {% endif %}
               </small></p>
-              <p class="card-text">{{ user_profile.bio }}</p>
+              <p class="card-text">{{ object.bio }}</p>
           </div>
         </div>
       </div>

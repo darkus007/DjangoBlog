@@ -61,11 +61,16 @@ class UserProfileView(DetailView):
     model = Profile
     template_name = 'registration/user_profile_show.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user_profile = get_object_or_404(Profile, slug=self.kwargs['slug'])
-        context['user_profile'] = user_profile
-        return context
+    def get_queryset(self):
+        return Profile.objects.filter(slug=self.kwargs['slug']) \
+            .values('user__first_name', 'user__last_name', 'image', 'bio',
+                    'ya_url', 'vk_url', 'ok_url', 'git_url', 'website_url')
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     user_profile = get_object_or_404(Profile, slug=self.kwargs['slug'])
+    #     context['user_profile'] = user_profile
+    #     return context
 
 
 class CreateUserProfileView(CreateView):
