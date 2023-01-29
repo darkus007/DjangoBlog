@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, PasswordResetForm
 from django.contrib.auth.models import User
 from django import forms
 
@@ -76,6 +76,15 @@ class UserPasswordChangeForm(PasswordChangeForm):
         model = User
         fields = ('old_password', 'new_password1', 'new_password2')
         # fields = '__all__' - что бы вернуть комментарии к паролю, напишем их в шаблоне change-password.html
+
+
+class UserPasswordResetForm(PasswordResetForm):
+    """ Стилизуем форму сброса пароля пользователя. """
+    email = forms.EmailField(label='Адрес электронной почты:', widget=forms.EmailInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = User
+        fields = ('email', )
 
 
 class ProfilePageForm(forms.ModelForm):

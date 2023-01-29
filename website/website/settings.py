@@ -58,11 +58,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'website.urls'
 
+# изменены настройки TEMPLATES, в такой конфигурации Django сначала ищет шаблоны
+# password_reset_....html в папке 'members/templates/', затем в самом Django
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
         'APP_DIRS': True,
+        'DIRS': ['members/templates/', ],
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
