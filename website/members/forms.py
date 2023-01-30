@@ -78,15 +78,6 @@ class UserPasswordChangeForm(PasswordChangeForm):
         # fields = '__all__' - что бы вернуть комментарии к паролю, напишем их в шаблоне change-password.html
 
 
-class UserPasswordResetForm(PasswordResetForm):
-    """ Стилизуем форму сброса пароля пользователя. """
-    email = forms.EmailField(label='Адрес электронной почты:', widget=forms.EmailInput(attrs={'class': 'form-control'}))
-
-    class Meta:
-        model = User
-        fields = ('email', )
-
-
 class ProfilePageForm(forms.ModelForm):
     """ Формы для классов представления Profile """
     class Meta:
