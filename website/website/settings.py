@@ -25,7 +25,7 @@ SECRET_KEY = getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
@@ -176,3 +176,63 @@ ADMINS = [  # админы, которым будут отправлены пи�
     ('admin', 'admin@mail.ru'),
 ]
 SERVER_EMAIL = 'from@email.ru'  # адрес почты с которой будут отправлены письма
+
+# настраиваем логирование
+LOGGING = {
+    'version': 1,
+    'disable_existing_logger': True,    # отключаем все регистраторы, используемые по умолчанию
+
+    'filters': {
+        'require_debug_false': {
+            # выводит сообщения только в том случае, если включен отладочный режим (DEBUG = True)
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            # выводит сообщения только в том случае, если выключен отладочный режим (DEBUG = False)
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+
+    'formatters': {
+        'simple': {
+            'format': '[%(asctime)s] %(levelname)s: %(message)s',   # формат сообщения
+            'datefmt': '%Y.%m.%d %H:%M:%S',                         # формат временной метки
+        }
+    },
+
+    'handlers': {
+        'console_dev': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'filters': ['require_debug_true'],
+        },
+        'console_prod': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'filters': ['require_debug_false'],
+        },
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/website.log',
+            'maxBytes': 1048576,
+            'backupCount': 10,
+            'formatter': 'simple',
+            'filters': ['require_debug_false'],
+        },
+    },
+
+    'loggers': {
+        'django': {                 # собирает сообщения от всех подсистем фреймворка
+            'handlers': ['console_dev', 'console_prod'],
+        },
+        'django.server': {          # собирает сообщения от подсистемы обработки запросов и формирования ответов
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # 'django.db.backends': {      # собирает сообщения обо всех операциях с базой данных сайта
+        #     'handlers': ['console_dev'],
+        #     'level': 'DEBUG',       # DEBUG - по умолчанию
+        # }
+    }
+}
