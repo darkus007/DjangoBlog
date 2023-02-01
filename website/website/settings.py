@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'ckeditor',
+
     "debug_toolbar",  # django-debug-toolbar
     "captcha",
 
@@ -62,9 +64,9 @@ ROOT_URLCONF = 'website.urls'
 # password_reset_....html в папке 'members/templates/', затем в самом Django
 TEMPLATES = [
     {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'APP_DIRS': True,
         'DIRS': ['members/templates/', ],
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -235,4 +237,13 @@ LOGGING = {
         #     'level': 'DEBUG',       # DEBUG - по умолчанию
         # }
     }
+}
+
+# настройка ckeditor
+CKEDITOR_CONFIGS = {
+    'default': {
+        # 'toolbar': 'full',
+        'height': 400,
+        'width': 'full',    # работает при добавлении CSS стилей
+    },
 }
