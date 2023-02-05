@@ -9,6 +9,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    # скрываем поля пользователя и slug
+    # они будут добавлены в классе представления через функцию perform_create
+    user = serializers.ReadOnlyField(source='user.username')
+    slug = serializers.ReadOnlyField()
+
     class Meta:
         model = Post
-        fields = ('id', 'title', 'body')
+        fields = ('id', 'user', 'cat', 'title', 'slug', 'body')
