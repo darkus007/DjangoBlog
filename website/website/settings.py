@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
@@ -44,11 +44,16 @@ INSTALLED_APPS = [
 
     'blog.apps.BlogConfig',
     'members.apps.MembersConfig',
+
+    'rest_framework',   # обрабатывает лишь запросы, пришедшие с того же домена, на котором располагается веб-служба
+    'corsheaders',      # доп библиотека, для обработки запросов с других доменов
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',    # обязательно добавляем перед CommonMiddleware (ниже)
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

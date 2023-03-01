@@ -6,7 +6,7 @@ COPY website /website
 
 ENV SECRET_KEY='you_django_sickret-key'
 
-ENV DJANGO_SUPERUSER_PASSWORD=You_Admin_paword!
+ENV DJANGO_SUPERUSER_PASSWORD=You_Admin_password!
 ENV DJANGO_SUPERUSER_EMAIL=example@example.com
 ENV DJANGO_SUPERUSER_USERNAME=admin
 

@@ -19,12 +19,15 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+handler404 = 'blog.views.pageNotFound'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),
     path('members/', include('django.contrib.auth.urls')),
     path('members/', include('members.urls')),
     path('captcha/', include('captcha.urls')),
+    path('api/', include('api.urls')),
 ]
 
 # добавляем для построения пути к статическим файлам (картинки в профайле)

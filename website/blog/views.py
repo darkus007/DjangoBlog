@@ -191,3 +191,7 @@ def send_email_to_staff(request):
 
 def send_email_to_staff_success(request):
     return render(request, 'blog/send_email_success.html')
+
+
+def pageNotFound(request, exception):
+    return render(request, 'blog/base.html')
