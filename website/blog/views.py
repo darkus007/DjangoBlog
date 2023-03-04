@@ -18,6 +18,7 @@ class HomeView(ListView):
 
     def get_queryset(self):
         # return Post.objects.all().select_related('cat', 'user')
+        # raise ValueError(">>>> Тестируем middleware! <<<<")     # для теста MiddlewareAllException
         return Post.objects.values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'cat__slug')
 
     def get_context_data(self, **kwargs):
@@ -50,7 +51,7 @@ class PostDetailView(DetailView):
         context['total_likes'] = total_likes
         context['liked'] = liked
         return context
-    
+
 
 def like_post(requests, slug):
     post = get_object_or_404(Post, slug=requests.POST.get('post_slug'))  # <button type="submit" name="post_slug" ...
@@ -138,6 +139,7 @@ class PostsByCategory(ListView):
 
 
 def search_blogs(request):
+    # raise ValueError(">>>> Тестируем middleware! <<<<")  # для теста MiddlewareAllException
     if request.method == 'POST':
         searched = request.POST['searched']  # <input name="searched" ...
         q = Q(title__icontains=searched) | Q(body__icontains=searched)
