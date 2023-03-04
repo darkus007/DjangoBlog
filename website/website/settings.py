@@ -231,6 +231,11 @@ LOGGING = {
             'formatter': 'simple',
             'filters': ['require_debug_false'],
         },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false']
+        }
     },
 
     'loggers': {
@@ -252,7 +257,7 @@ LOGGING = {
         # logger = logging.getLogger(__name__), ult __name__ = 'website.middleware'
         'website.middleware': {
             'level': 'WARNING',
-            'handlers': ['file', 'console_dev'],    # В файл пишет когда DEBUG = True, см конфиг file handler
+            'handlers': ['file', 'console_dev', 'mail_admins'],   # В файл пишет когда DEBUG = True,
             'propagate': False,
         },
     }
