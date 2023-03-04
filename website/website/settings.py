@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
@@ -135,8 +135,12 @@ INTERNAL_IPS = [  # django-debug-toolbar
 
 STATIC_URL = 'static/'
 # добавляем для построения пути к статическим файлам (картинки в профайле)
-STATIC_ROOT = path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = ['media/']
+# STATIC_ROOT = path.join(BASE_DIR, 'static')
+# STATIC_DIRS = path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    # '/var/www/static/',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -271,3 +275,4 @@ CKEDITOR_CONFIGS = {
         'width': 'full',    # работает при добавлении CSS стилей
     },
 }
+# CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
