@@ -25,7 +25,7 @@ SECRET_KEY = getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -61,6 +61,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     "debug_toolbar.middleware.DebugToolbarMiddleware",  # django-debug-toolbar
+
+    'website.middleware.MiddlewareAllException',     # обработка исключений
 ]
 
 ROOT_URLCONF = 'website.urls'
@@ -191,11 +193,11 @@ LOGGING = {
 
     'filters': {
         'require_debug_false': {
-            # выводит сообщения только в том случае, если включен отладочный режим (DEBUG = True)
+            # выводит сообщения только в том случае, если отключен отладочный режим (DEBUG = False)
             '()': 'django.utils.log.RequireDebugFalse',
         },
         'require_debug_true': {
-            # выводит сообщения только в том случае, если выключен отладочный режим (DEBUG = False)
+            # выводит сообщения только в том случае, если выключен отладочный режим (DEBUG = True)
             '()': 'django.utils.log.RequireDebugTrue',
         },
     },
@@ -209,16 +211,19 @@ LOGGING = {
 
     'handlers': {
         'console_dev': {
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
             'filters': ['require_debug_true'],
         },
         'console_prod': {
+            'level': 'WARNING',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
             'filters': ['require_debug_false'],
         },
         'file': {
+            'level': 'WARNING',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/website.log',
             'maxBytes': 1048576,
@@ -230,17 +235,26 @@ LOGGING = {
 
     'loggers': {
         'django': {                 # собирает сообщения от всех подсистем фреймворка
+            'level': 'INFO',
             'handlers': ['console_dev', 'console_prod'],
         },
         'django.server': {          # собирает сообщения от подсистемы обработки запросов и формирования ответов
+            'level': 'WARNING',
             'handlers': ['file'],
-            'level': 'INFO',
             'propagate': True,
         },
         # 'django.db.backends': {      # собирает сообщения обо всех операциях с базой данных сайта
         #     'handlers': ['console_dev'],
         #     'level': 'DEBUG',       # DEBUG - по умолчанию
         # }
+
+        # добавлен регистратора, который объявлен в файле website/middleware.py
+        # logger = logging.getLogger(__name__), ult __name__ = 'website.middleware'
+        'website.middleware': {
+            'level': 'WARNING',
+            'handlers': ['file', 'console_dev'],    # В файл пишет когда DEBUG = True, см конфиг file handler
+            'propagate': False,
+        },
     }
 }
 

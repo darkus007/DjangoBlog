@@ -18,6 +18,7 @@ class HomeView(ListView):
 
     def get_queryset(self):
         # return Post.objects.all().select_related('cat', 'user')
+        raise ValueError(">>>> Тестируем middleware! <<<<")     # для теста MiddlewareAllException
         return Post.objects.values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'cat__slug')
 
     def get_context_data(self, **kwargs):
