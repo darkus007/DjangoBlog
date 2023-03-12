@@ -8,8 +8,8 @@ from .views import api_category, APIPostView, APIPostDetailView  # APIPostViewSe
 # router.register('posts', APIPostViewSet)
 
 urlpatterns = [
-    path('categories/', api_category),
+    path('categories/', api_category, name='api-category'),
     # path('', include(router.urls)),
-    path('posts/<slug:slug>/', APIPostDetailView.as_view()),
-    path('posts/', APIPostView.as_view()),
+    path('posts/<slug:slug>/', APIPostDetailView.as_view(), name='api-post-detail'),
+    path('posts/', APIPostView.as_view(), name='api-post'),
 ]
