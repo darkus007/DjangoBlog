@@ -1,3 +1,4 @@
+from django.forms import model_to_dict
 from django.shortcuts import render, HttpResponse
 from django.http import JsonResponse
 
@@ -72,7 +73,7 @@ class APIPostView(views.APIView):
     permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request) -> Response:
-        posts = Post.objects.all()
+        posts = Post.objects.select_related('user', 'cat').prefetch_related('likes').order_by('-time_created', 'cat')
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
@@ -93,7 +94,7 @@ class APIPostDetailView(views.APIView):
     """
 
     def get(self, request, slug) -> Response:
-        post = Post.objects.get(slug=slug)
+        post = Post.objects.select_related('user', 'cat').prefetch_related('likes').get(slug=slug)
         serializer = PostSerializer(post)
         return Response(serializer.data)
 
@@ -105,7 +106,7 @@ class APIPostDetailView(views.APIView):
 
     def delete(self, request, slug) -> Response:
         post = Post.objects.get(slug=slug)
-        if post.user == request.user:
+        if post.user == request.user or request.user.is_staff:
             post.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
