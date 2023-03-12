@@ -23,8 +23,8 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', verbose_name='Автор поста')
     cat = models.ForeignKey(Category, on_delete=models.SET(1),  # первая кат-рия будет "Разное"
                             related_name='category', verbose_name='Категория')
-    title = models.CharField(max_length=255, verbose_name='Название поста')
-    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
+    title = models.CharField(max_length=255, verbose_name='Название статьи')
+    slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
     # body = models.TextField(verbose_name='Текст поста')
     body = RichTextField(blank=True, null=True, verbose_name='Текст статьи')
     time_created = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
@@ -37,7 +37,7 @@ class Post(models.Model):
         """ Добавляем slug, если он не был передан """
         if not self.slug or self.slug == '':
             self.slug = slugify(self.title)
-            print(f'{self.slug=}')
+            # print(f'{self.slug=}')
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
