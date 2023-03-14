@@ -21,12 +21,9 @@ logger = logging.getLogger(__name__)
 class MiddlewareAllException:
     def __init__(self, get_response):
         self.get_response = get_response
-        logger.debug(f">>>>  Выполнен '__init__' класса MiddlewareAllException.")
 
     def __call__(self, request):
-        logger.debug(f">>>>  Выполнен код класса MiddlewareAllException ДО обработки VIEW.")
         response = self.get_response(request)
-        logger.debug(f">>>>  Выполнен код класса MiddlewareAllException ПОСЛЕ обработки VIEW.")
         return response
 
     @staticmethod

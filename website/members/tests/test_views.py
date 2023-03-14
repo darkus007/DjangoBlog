@@ -9,8 +9,6 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from captcha.conf import settings as captcha_settings
-
 from members.models import Profile
 
 User = get_user_model()
@@ -21,12 +19,10 @@ class ViewsTestCase(TestCase):
     def setUpClass(cls) -> None:
         super().setUpClass()
 
-        settings.SECRET_KEY = "some_secret_key!"    # до создания и регистрации пользователя
-        # captcha_settings.CAPTCHA_TEST_MODE = True  # отключаем проверку captcha
+        settings.SECRET_KEY = "some_secret_key!"
 
         cls.user = User.objects.create_user(username='test_user', password='test_user_password')
 
-        # cls.client = Client()
         cls.auth_client = Client()
         cls.auth_client.force_login(cls.user)
 
@@ -45,10 +41,9 @@ class ViewsTestCase(TestCase):
     def tearDownClass(cls) -> None:
         super().tearDownClass()
         settings.SECRET_KEY = None
-        # captcha_settings.CAPTCHA_TEST_MODE = False
 
     def test_create_user_profile_view(self):
-        profiles_count = Profile.objects.count()  # текущее количество записей в Profile
+        profiles_count = Profile.objects.count()
 
         user = User.objects.create_user(username='test_user2', password='test_user_password2')
         auth_client = Client()
@@ -63,18 +58,17 @@ class ViewsTestCase(TestCase):
             'git_url': 'git-url',
             'website_url': 'website-url',
         }
-        # Отправляем POST-запрос
         response = auth_client.post(reverse('user-profile-create'),
                                     data=form_data,
                                     follow=True)
         if response.context.get('form'):    # покажет ошибки формы, если они есть
             print(f"\nОшибка при валидации формы: {response.context.get('form').errors}")
 
-        self.assertRedirects(response, '/members/profile/testuser2-profile/')  # Проверяем, сработал ли редирект
-        self.assertEqual(Profile.objects.count(), profiles_count + 1)  # Проверяем, увеличилось ли число профайлов
+        self.assertRedirects(response, '/members/profile/testuser2-profile/')
+        self.assertEqual(Profile.objects.count(), profiles_count + 1)
 
     def test_edit_user_profile_view(self):
-        profiles_count = Profile.objects.count()  # текущее количество записей в Profile
+        profiles_count = Profile.objects.count()
 
         form_data = {
             # 'user': self.user,    # пользователь добавляется автоматически при валидации
@@ -85,12 +79,10 @@ class ViewsTestCase(TestCase):
             'git_url': 'git-url2',
             'website_url': 'website-url2',
         }
-        # Отправляем POST-запрос
         response = self.auth_client.post(reverse('user-profile-update', kwargs={'slug': 'user-profile'}),
                                          data=form_data,
                                          follow=True)
         if response.context.get('form'):
-            # покажет ошибки формы
             print(f"\nОшибка при валидации формы: {response.context.get('form').errors}")
 
         self.user.profile.refresh_from_db()
@@ -100,5 +92,5 @@ class ViewsTestCase(TestCase):
         for key, value in form_data.items():
             self.assertEqual(user_to_dict[key], value)
 
-        self.assertRedirects(response, reverse('home'))  # Проверяем, сработал ли редирект
-        self.assertEqual(Profile.objects.count(), profiles_count)  # Проверяем неизменность количества профайлов
+        self.assertRedirects(response, reverse('home'))
+        self.assertEqual(Profile.objects.count(), profiles_count)

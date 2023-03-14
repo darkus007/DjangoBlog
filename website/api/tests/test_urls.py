@@ -22,17 +22,14 @@ class UrlsTestCase(TestCase):   # python manage.py test api.tests.test_urls.Urls
 
         settings.SECRET_KEY = "some_secret_key!"
 
-        # Создаем пользователя для тестов
         cls.user = User.objects.create_user(username='test_user', password='test_user_password')
         cls.admin = User.objects.create_superuser(username='admin', password='admin_password')
 
-        # Создаем тестовую запись в БД Категории
         cls.category = Category.objects.create(
             title='Тест категории',
             slug='test_category'
         )
 
-        # Создаем тестовую запись в БД Статьи (Поста)
         cls.post = Post.objects.create(
             user=cls.user,
             cat=cls.category,
@@ -49,7 +46,6 @@ class UrlsTestCase(TestCase):   # python manage.py test api.tests.test_urls.Urls
         cls.admin_client.force_login(cls.admin)
 
         logging.getLogger('django.request').setLevel(logging.ERROR)
-        # loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
 
     @classmethod
     def tearDownClass(cls) -> None:

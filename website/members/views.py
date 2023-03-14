@@ -2,7 +2,6 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView
 from django.contrib.auth.views import PasswordChangeView
-# from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from .forms import UserRegistrationForm, EditUserForm, UserPasswordChangeForm, ProfilePageForm
 from .models import Profile
@@ -11,9 +10,8 @@ from website.utilites import slugify
 
 
 class UserRegistrationView(CreateView):
-    # form_class = UserCreationForm
     form_class = UserRegistrationForm
-    template_name = 'registration/register_or_edit_user.html'   # шаблон по умолчанию register.html
+    template_name = 'registration/register_or_edit_user.html'
     success_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
@@ -25,7 +23,6 @@ class UserRegistrationView(CreateView):
 
 
 class UserChangeView(UpdateView):
-    # form_class = UserChangeForm
     form_class = EditUserForm
     template_name = 'registration/register_or_edit_user.html'
     success_url = reverse_lazy('home')
@@ -46,9 +43,8 @@ class UserChangeView(UpdateView):
 
 
 class UserPasswordChangeView(PasswordChangeView):
-    # form_class = PasswordChangeForm
     form_class = UserPasswordChangeForm
-    success_url = reverse_lazy('password-changed')      # перенаправление на кастомную страницу
+    success_url = reverse_lazy('password-changed')
 
 
 def password_changed(request):
@@ -66,18 +62,11 @@ class UserProfileView(DetailView):
             .values('user__first_name', 'user__last_name', 'image', 'bio',
                     'ya_url', 'vk_url', 'ok_url', 'git_url', 'website_url')
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     user_profile = get_object_or_404(Profile, slug=self.kwargs['slug'])
-    #     context['user_profile'] = user_profile
-    #     return context
-
 
 class CreateUserProfileView(CreateView):
     model = Profile
     form_class = ProfilePageForm
     template_name = 'registration/user_profile_create_update.html'
-    # fields = '__all__'  # поля теперь прописаны в ProfilePageForm
 
     def form_valid(self, form):
         """ Передаем пользователя в форму """
@@ -97,7 +86,6 @@ class EditUserProfileView(UpdateView):
     model = Profile
     form_class = ProfilePageForm
     template_name = 'registration/user_profile_create_update.html'
-    # fields = ['bio', 'image', 'website_url', 'git_url', 'ya_url', 'vk_url', 'ok_url']
     success_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):

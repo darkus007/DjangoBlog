@@ -26,21 +26,15 @@ from blog.models import Category, Post
 class Settings(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-
-        # Обязательно для Django, иначе может подняться исключение
-        # AttributeError: type object 'Settings' has no attribute 'cls_atomics'
         super().setUpClass()
 
-        # Создаем пользователя для тестов
         cls.user = User.objects.create_user(username='test_user', password='test_user_password')
 
-        # Создаем тестовую запись в БД Категории
         cls.category = Category.objects.create(
             title='Тест категории',
             slug='test_category'
         )
 
-        # Создаем тестовую запись в БД Статьи (Поста)
         cls.post = Post.objects.create(
             user=cls.user,
             cat=cls.category,
@@ -49,7 +43,6 @@ class Settings(TestCase):
             body='Текст статьи',
         )
 
-        # добавляем лайк
         cls.post.likes.add(cls.user)
         cls.post.save()
 

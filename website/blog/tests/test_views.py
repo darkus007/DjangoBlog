@@ -20,7 +20,7 @@ class ViewsTestCase(TestCase):
     def setUpClass(cls) -> None:
         super().setUpClass()
 
-        settings.SECRET_KEY = "some_secret_key!"    # до создания и регистрации пользователя
+        settings.SECRET_KEY = "some_secret_key!"
         captcha_settings.CAPTCHA_TEST_MODE = True  # отключаем проверку captcha
 
         cls.user = User.objects.create_user(username='test_user', password='test_user_password')
@@ -29,14 +29,12 @@ class ViewsTestCase(TestCase):
         cls.auth_client = Client()
         cls.auth_client.force_login(cls.user)
 
-        # Создаем тестовую запись в БД Категории
         cls.category = Category.objects.create(
             title='Тест категории',
             slug='test_category'
         )
 
         cls.post = []
-        # Создаем тестовую запись в БД Статьи (Поста)
         for i in range(0, 27):
             cls.post.append(Post.objects.create(
                 user=cls.user,
@@ -59,7 +57,6 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.context.get('all_categories'), expected_all_categories)
 
     def test_post_detail_view(self):
-        # response = self.client.get(reverse('post-detail'), kwargs={'slug': self.post[0].slug})
         response = self.client.get(f'/post/{self.post[0].slug}/')
         expected_object = {'title': self.post[0].title,
                            'slug': self.post[0].slug,
@@ -80,24 +77,22 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.context.get('object'), expected_object)
 
     def test_add_post_view(self):
-        posts_count = Post.objects.count()  # текущее количество записей в Category
+        posts_count = Post.objects.count()
         form_data = {
             # 'user': self.user,    # пользователь добавляется автоматически при валидации
-            'cat': 1,   # передаем 1, так как в форме используем widgets = {'cat': forms.Select ...
+            'cat': 1,
             'title': 'Тестовый пост 2',
             'slug': 'none',  # эмитируем поведение формы (widgets ...), slug формируется автоматически
             'body': 'Текст поста 2',
             'captcha_0': 'dummy-value',
             'captcha_1': 'PASSED'
         }
-        # Отправляем POST-запрос
         response = self.auth_client.post(reverse('post-add'), data=form_data, follow=True)
         if response.context.get('form'):
-            # покажет ошибки формы
             print(f"\nОшибка при валидации формы: {response.context.get('form').errors}")
 
-        self.assertRedirects(response, reverse('home'))  # Проверяем, сработал ли редирект
-        self.assertEqual(Post.objects.count(), posts_count + 1)  # Проверяем, увеличилось ли число постов
+        self.assertRedirects(response, reverse('home'))
+        self.assertEqual(Post.objects.count(), posts_count + 1)
 
     def test_paginator(self):
         response = self.client.get(reverse('home'))

@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
-from django.core.mail import EmailMessage, mail_admins, send_mail
+from django.core.mail import mail_admins
 
 from website.settings import ALL_CATEGORIES, PAGINATE_BY_CONST
 from .models import Post, Category
@@ -17,8 +17,6 @@ class HomeView(ListView):
     paginate_by = PAGINATE_BY_CONST
 
     def get_queryset(self):
-        # return Post.objects.all().select_related('cat', 'user')
-        # raise ValueError(">>>> Тестируем middleware! <<<<")     # для теста MiddlewareAllException
         return Post.objects.values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'cat__slug')
 
     def get_context_data(self, **kwargs):
@@ -32,7 +30,6 @@ class PostDetailView(DetailView):
     template_name = 'blog/post_detail.html'
 
     def get_queryset(self):
-        # return Post.objects.filter(slug=self.kwargs['slug']).select_related('cat', 'user')
         return Post.objects.filter(slug=self.kwargs['slug']) \
             .values('title', 'slug', 'body', 'time_created', 'user__username', 'cat__title', 'user__id',
                     'user__first_name', 'user__last_name', 'user__profile__image', 'user__profile__website_url',
@@ -65,9 +62,8 @@ def like_post(requests, slug):
 
 class AddPostView(CreateView):
     model = Post
-    form_class = PostForm  # подключаем стилизованную форму
+    form_class = PostForm
     template_name = 'blog/post_add.html'
-    # fields = '__all__'  # какие поля отображать (уже описаны в PostForm)
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
@@ -139,7 +135,6 @@ class PostsByCategory(ListView):
 
 
 def search_blogs(request):
-    # raise ValueError(">>>> Тестируем middleware! <<<<")  # для теста MiddlewareAllException
     if request.method == 'POST':
         searched = request.POST['searched']  # <input name="searched" ...
         q = Q(title__icontains=searched) | Q(body__icontains=searched)
@@ -169,21 +164,9 @@ def send_email_to_staff(request):
     if request.method == 'POST':
         form = SendToStaffForm(request.POST)
         if form.is_valid():
-
-            # email = EmailMessage(subject=form.cleaned_data['title'],
-            #                      body=form.cleaned_data['body'],
-            #                      to=[request.user.email])
-            # email.send()
-
-            # send_mail('Тема сообщения', 'Само сообщение',
-            #           from_email='from@email.ru',
-            #           recipient_list=['to@email.ru'],
-            #           fail_silently=False, connection=None, html_message=None)
-
             msg = form.cleaned_data['body'] + '\n' + request.user.email
             mail_admins(form.cleaned_data['title'], msg,
                         fail_silently=False, connection=None, html_message=None)
-
             return redirect('send-email-success')
     else:
         form = SendToStaffForm()

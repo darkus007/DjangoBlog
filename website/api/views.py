@@ -1,12 +1,8 @@
-from django.forms import model_to_dict
-from django.shortcuts import render, HttpResponse
-from django.http import JsonResponse
-
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import generics, viewsets, views
+from rest_framework import views
 
 from blog.models import Category, Post
 from .serializers import CategorySerializer, PostSerializer
@@ -14,7 +10,7 @@ from website.utilites import slugify
 
 
 @api_view(['GET', 'POST'])      # декоратор только задействует web-представление, работает и без него
-@permission_classes((IsAuthenticatedOrReadOnly, ))  # isAdminUser - только админ или персонал
+@permission_classes((IsAuthenticatedOrReadOnly, ))
 def api_category(request) -> Response:
     """
     Функция представления для Категорий.
@@ -38,29 +34,6 @@ def api_category(request) -> Response:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({'error': 'Неправильный запрос.'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class APIPost(generics.ListCreateAPIView):    # только GET и POST
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-#     permission_classes = (IsAuthenticatedOrReadOnly, )
-
-#     def perform_create(self, serializer):
-#         """ Добавляем пользователя и slug """
-#         serializer.save(user=self.request.user)
-#         serializer.save(slug=slugify(self.request.POST.get('title')))
-
-# class APIPostViewSet(viewsets.ModelViewSet):
-#     """ Метаконтроллер, выполняет все действия (выдача ресурсов, формирование адресов) """
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-#     slug_field = 'slug'
-#     permission_classes = (IsAuthenticatedOrReadOnly, )
-#
-#     def perform_create(self, serializer):
-#         """ Добавляем пользователя и slug """
-#         serializer.save(user=self.request.user)
-#         serializer.save(slug=slugify(self.request.POST.get('title')))
 
 
 class APIPostView(views.APIView):

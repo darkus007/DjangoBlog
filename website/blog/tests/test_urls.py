@@ -26,16 +26,13 @@ class UrlsTestCase(TestCase):
         super().setUpClass()
         cls.client = Client()
 
-        # Создаем пользователя для тестов
         cls.user = User.objects.create_user(username='test_user', password='test_user_password')
 
-        # Создаем тестовую запись в БД Категории
         cls.category = Category.objects.create(
             title='Тест категории',
             slug='test_category'
         )
 
-        # Создаем тестовую запись в БД Статьи (Поста)
         cls.post = Post.objects.create(
             user=cls.user,
             cat=cls.category,
@@ -88,7 +85,6 @@ class UrlsTestCase(TestCase):
             self.assertTemplateUsed(response, template)
 
     def test_user_posts(self):
-        # авторизуем пользователя
         authorized_client = Client()
         authorized_client.force_login(self.user)
 

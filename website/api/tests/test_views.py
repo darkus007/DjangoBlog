@@ -28,7 +28,6 @@ class Settings(TestCase):
 
         settings.SECRET_KEY = "some_secret_key!"
 
-        # Создаем пользователя для тестов
         cls.user = User.objects.create_user(username='test_user', password='test_user_password')
         cls.user2 = User.objects.create_user(username='test_user2', password='test_user_password2')
         cls.admin = User.objects.create_superuser(username='admin', password='admin_password')
