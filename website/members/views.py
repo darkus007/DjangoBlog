@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView
 from django.contrib.auth.views import PasswordChangeView
+from django.core.cache import cache
 
 from .forms import UserRegistrationForm, EditUserForm, UserPasswordChangeForm, ProfilePageForm
 from .models import Profile
@@ -72,6 +73,7 @@ class CreateUserProfileView(CreateView):
         """ Передаем пользователя в форму """
         form.instance.user = self.request.user
         form.instance.slug = slugify(str(self.request.user.username) + '-profile')
+        cache.delete(f'{self.request.user.username}_profile')
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

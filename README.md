@@ -1,20 +1,21 @@
-# DjangoBlog v.1.0
+# DjangoBlog v.2.0
 Блог написан на Django. Читать статьи (посты) могут все без регистрации. Создавать, редактировать и удалять статьи могут только зарегистрированные пользователи. 
 Создавать и редактировать категории могут только администраторы и персонал сайта.
 Реализована обратная связь с администратором сайта через e-mail сообщения. Возможно отправить запрос добавить категорию, сообщить об ошибке или пожелания по улучшению сайта, прочее.
 Также через e-mail сообщения реализовано восстановление пароля пользователя. Работа с сайтом возможна через REST API, его подробное описание приведено ниже.
 
-При написании приложения использованы следующие основные пакеты, фреймворки и технологии: \
+При разработке приложения использованы следующие основные пакеты, фреймворки и технологии: \
 [Django](https://pypi.org/project/Django/); \
 [Django REST framework](https://www.django-rest-framework.org); \
 [Django Debug Toolbar](https://pypi.org/project/django-debug-toolbar/); \
 [Django Simple Captcha](https://pypi.org/project/django-simple-captcha/); \
 [Django CKEditor](https://pypi.org/project/django-ckeditor/); \
-[Bootstrap](https://bootstrap-4.ru/).
+[Bootstrap](https://bootstrap-4.ru/); \
+[Docker](https://www.docker.com/).
 
-Полный список можно посмотреть в фале 'requirements.txt'.
+Полный список можно посмотреть в фале `requirements.txt`.
 
-База данных [SQLite3](https://www.sqlite.org/index.html).
+База данных [PostgreSQL](https://www.postgresql.org/).
 
 ### Описание Models
 ##### Приложение "blog"
@@ -142,26 +143,33 @@
 Ответ `[{"id":1,"user":"admin","cat":1,"title":"Первая статья","slug":"pervaya-statya","body":"Текст статьи","time_created":"2023-02-07T18:30:54.110166Z","likes":[]}, ...]`
 
 ## Установка и запуск
-
-#### Локально на Вашем устройстве (используя отладочный сервер)
-Приложение написано на [Python v.3.11](https://www.python.org). 
-1. Скачайте DjangoBlog на Ваше устройство любым удобным способом (например Code -> Download ZIP, распакуйте архив).
-2. Установите [Python](https://www.python.org), если он у Вас еще не установлен.
-3. Установите необходимые для работы приложения модули. Для этого откройте терминал, перейдите в каталог с приложением (cd <путь к приложению>/DjangoBlog), выполните команду `pip3 install -r requirements.txt`. Если Вы пользователь Microsoft Windows, то вместо `pip3 install ...` следует использовать  `pip install -r requirements.txt`
-4. Установите [переменную окружения](https://wiki.archlinux.org/title/Environment_variables_(%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9)) `SECRET_KEY`, например выполнив в терминале `export SECRET_KEY="ваш_сложный_секретный_ключ_djang"`.
-5. Для запуска приложения локально на Вашем устройстве перейдите в папку `website` (`cd website` или `dir website` для Windows) выполните команду `python3 manage.py runserver` (Для Microsoft Windows `python manage.py runserver`).
-6. Откройте любимый Веб-браузер и перейдите по адресу http://127.0.0.1:8000/
-#### В контейнере Docker (используя отладочный сервер)
-1. Скачайте FlaskBlog на Ваше устройство любым удобным способом (например Code -> Download ZIP, распакуйте архив).
-2. Установите [Docker](https://www.docker.com/), если он у Вас еще не установлен.
-3. Откройте терминал, перейдите в каталог с приложением (cd <путь к приложению>/DjangoBlog).
-4. В Dockerfile установите Ваши значения переменных окружения `SECRET_KEY`, `DJANGO_SUPERUSER_PASSWORD`, `DJANGO_SUPERUSER_EMAIL` и `DJANGO_SUPERUSER_USERNAME`.
-5. Выполните сборку Docker образа (image) `docker build -t django_blog .`.
-6. Запустите контейнер `docker run -p 8000:8000 -d django_blog`.
-7. Откройте любимый Веб-браузер и перейдите по адресу http://127.0.0.1:8000/
+Приложение написано на [Python v.3.11](https://www.python.org). \
+Скачайте DjangoBlog на Ваше устройство любым удобным способом (например Code -> Download ZIP, распакуйте архив). \
+Установите [Docker](https://www.docker.com/), если он у Вас еще не установлен.
 
 ### Настройка приложения
-Откройте файл `website/website/settings.py` \
+Откройте файл `website/website/settings.py` при необходимости откорректируйте значения \
 `PAGINATE_BY_CONST = 25` - задает сколько постов будет отображаться на странице. \
 `ALL_CATEGORIES = {'title': 'Все категории', 'slug': 'all-categories'}` - задает название для всех категорий, сейчас установлено "Все категории", можно поменять только его, slug менять необязательно. \
 `EMAIL_THEME_CHOICES = ` - перечень тем для писем при обращении к администратору сайта.
+
+Откройте файл `env.dev` и измените значения переменных окружения на свои: \
+`SECRET_KEY` - секретный ключ Django \
+`DJANGO_SUPERUSER_PASSWORD` - пароль супер пользователя \
+`DJANGO_SUPERUSER_EMAIL` - email супер пользователя \
+`DJANGO_SUPERUSER_USERNAME` - login супер пользователя \
+`POSTGRES_DB` - название базы данных (совпадает с `POSTGRES_DB` файла `docker-compose.yml`) \
+`POSTGRES_USER` - пользователь базы данных (совпадает с `POSTGRES_USER` файла `docker-compose.yml`) \
+`POSTGRES_PASSWORD` - пароль пользователя базы данных (совпадает с `POSTGRES_PASSWORD` файла `docker-compose.yml`) \
+
+Отредактируйте значения переменных окружения файла `docker-compose.yml` \
+`POSTGRES_DB` - название базы данных (совпадает с `POSTGRES_DB` файла `env.dev`) \
+`POSTGRES_USER` - пользователь базы данных (совпадает с `POSTGRES_USER` файла `env.dev`) \
+`POSTGRES_PASSWORD` - пароль пользователя базы данных (совпадает с `POSTGRES_PASSWORD` файла `env.dev`)
+
+!!! Приложение запустится без корректировки и изменения указанных в данном разделе файлов (`settings.py`, `env.dev` и `docker-compose.yml`)
+
+#### Запуск в контейнере Docker (используя отладочный сервер)
+Откройте терминал, перейдите в каталог с приложением (cd <путь к приложению>/DjangoBlog). \
+Выполните команду `docker-compose up -d --build`. Дождитесь сборки и запуска контейнеров. \
+Откройте любимый Веб-браузер и перейдите по адресу http://127.0.0.1:8000/ \

@@ -4,6 +4,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
 from django.core.mail import mail_admins
+from django.core.cache import cache
 
 from website.settings import ALL_CATEGORIES, PAGINATE_BY_CONST
 from .models import Post, Category
@@ -104,6 +105,11 @@ class AddCategoryView(CreateView):
     template_name = 'blog/category_add.html'
     success_url = reverse_lazy('categories')
 
+    def form_valid(self, form):
+        """ Чистим кэш categories для их преративного обновления на странице """
+        cache.delete('categories')
+        return super().form_valid(form)
+
 
 class UpdateCategoryView(UpdateView):
     model = Category
@@ -111,11 +117,21 @@ class UpdateCategoryView(UpdateView):
     template_name = 'blog/category_update.html'
     success_url = reverse_lazy('categories')
 
+    def form_valid(self, form):
+        """ Чистим кэш categories для их преративного обновления на странице """
+        cache.delete('categories')
+        return super().form_valid(form)
+
 
 class DeleteCategoryView(DeleteView):
     model = Category
     template_name = 'blog/category_delete.html'
     success_url = reverse_lazy('categories')
+
+    def form_valid(self, form):
+        """ Чистим кэш categories для их преративного обновления на странице """
+        cache.delete('categories')
+        return super().form_valid(form)
 
 
 class PostsByCategory(ListView):

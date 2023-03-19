@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+
+  website:
+    build: .
+    container_name: django_blog
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    env_file:
+      - env.dev
+    depends_on:
+      - postgres_db
+
+  postgres_db:
+    image: postgres:15.2-alpine
+    container_name: postgres_django_blog
+    restart: always
+    volumes:
+      - volume_django_blog:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+volumes:
+  volume_django_blog:
