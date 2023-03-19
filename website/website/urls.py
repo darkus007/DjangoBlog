@@ -30,7 +30,6 @@ urlpatterns = [
     path('api/', include('api.urls')),
 ]
 
-# добавляем для построения пути к статическим файлам (картинки в профайле)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += path('__debug__/', include('debug_toolbar.urls')),

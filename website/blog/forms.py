@@ -23,7 +23,6 @@ class PostForm(forms.ModelForm):
         fields = ('cat', 'title', 'slug', 'body', 'captcha')
 
         widgets = {
-            # 'user': forms.Select(attrs={'class': 'form-control'}),
             'cat': forms.Select(attrs={'class': 'form-control'}),
             'title': forms.TextInput(attrs={'class': 'form-control',
                                             'placeholder': 'Укажите название поста'}),
@@ -59,9 +58,6 @@ class SendToStaffForm(forms.Form):
     title = forms.ChoiceField(label='Тема обращения',
                               choices=EMAIL_THEME_CHOICES,
                               widget=forms.Select(attrs={'class': 'form-control', 'label': 'Название категории'}))
-    # title = forms.CharField(max_length=255,
-    #                         label='Название категории',
-    #                         widget=forms.TextInput(attrs={'class': 'form-control', 'label': 'Название категории'}))
     body = forms.CharField(label='Текст обращения',
                            widget=forms.Textarea(attrs={'class': 'form-control'}))
     captcha = CaptchaField(label='Введите текст с картинки',

@@ -13,21 +13,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from os import getenv, path
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,30 +37,28 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'members.apps.MembersConfig',
 
-    'rest_framework',   # обрабатывает лишь запросы, пришедшие с того же домена, на котором располагается веб-служба
-    'corsheaders',      # доп библиотека, для обработки запросов с других доменов
+    'rest_framework',
+    'corsheaders',
     'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',    # обязательно добавляем перед CommonMiddleware (ниже)
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    "debug_toolbar.middleware.DebugToolbarMiddleware",  # django-debug-toolbar
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 
     'website.middleware.MiddlewareAllException',     # обработка исключений
 ]
 
 ROOT_URLCONF = 'website.urls'
 
-# изменены настройки TEMPLATES, в такой конфигурации Django сначала ищет шаблоны
-# password_reset_....html в папке 'members/templates/', затем в самом Django
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -92,13 +82,14 @@ WSGI_APPLICATION = 'website.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': getenv('POSTGRES_DB', 'postgres'),
+        'USER': getenv('POSTGRES_USER', 'postgres'),
+        'PASSWORD': getenv('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': getenv('SQL_HOST', 'localhost'),
+        'PORT': getenv('SQL_PORT', 5432),
     }
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -115,9 +106,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
 LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
@@ -126,17 +114,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-INTERNAL_IPS = [  # django-debug-toolbar
-    "127.0.0.1",
-]
+INTERNAL_IPS = ["127.0.0.1", ]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-# добавляем для построения пути к статическим файлам (картинки в профайле)
-# STATIC_ROOT = path.join(BASE_DIR, 'static')
-# STATIC_DIRS = path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     BASE_DIR / "static",
     # '/var/www/static/',
@@ -178,11 +161,11 @@ CACHES = {
 }
 
 # настраиваем отправку писем
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # выводит в командной строке
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # отправляет на почтовый сервер
-DEFAULT_FROM_EMAIL = 'blog@mail.ru'  # адрес отправителя по умолчанию
-EMAIL_HOST = 'localhost'  # адрес SMTP-сервера, 'localhost' - по умолчанию
-EMAIL_PORT = 1025  # порт SMTP-сервера
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # выводит в командной строке
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # отправляет на почтовый сервер
+DEFAULT_FROM_EMAIL = 'blog@mail.ru'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
 # EMAIL_HOST_USER = 'user'                                         # логин для SMTP-сервера, по умолчанию пустая строка
 # EMAIL_HOST_PASSWORD = 'password'                                 # пароль для SMTP-сервера, по умолчанию пустая строка
 ADMINS = [  # админы, которым будут отправлены письма методом mail_admins
@@ -258,10 +241,10 @@ LOGGING = {
         # }
 
         # добавлен регистратора, который объявлен в файле website/middleware.py
-        # logger = logging.getLogger(__name__), ult __name__ = 'website.middleware'
+        # logger = logging.getLogger(__name__), где __name__ = 'website.middleware'
         'website.middleware': {
             'level': 'WARNING',
-            'handlers': ['file', 'console_dev', 'mail_admins'],   # В файл пишет когда DEBUG = True,
+            'handlers': ['file', 'console_dev', 'mail_admins'],
             'propagate': False,
         },
     }
@@ -275,4 +258,16 @@ CKEDITOR_CONFIGS = {
         'width': 'full',    # работает при добавлении CSS стилей
     },
 }
-# CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+
+
+# настройки Celery и Radis
+REDIS_HOST = 'redis'  # в докер контейнере
+# REDIS_HOST = '0.0.0.0'  # локально
+REDIS_PORT = '6379'
+
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
