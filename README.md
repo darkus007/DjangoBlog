@@ -1,4 +1,4 @@
-# DjangoBlog v.2.0
+# DjangoBlog v.2.1
 Блог написан на Django. Читать статьи (посты) могут все без регистрации. Создавать, редактировать и удалять статьи могут только зарегистрированные пользователи. 
 Создавать и редактировать категории могут только администраторы и персонал сайта.
 Реализована обратная связь с администратором сайта через e-mail сообщения. Возможно отправить запрос добавить категорию, сообщить об ошибке или пожелания по улучшению сайта, прочее.
@@ -7,6 +7,7 @@
 При разработке приложения использованы следующие основные пакеты, фреймворки и технологии: \
 [Django](https://pypi.org/project/Django/); \
 [Django REST framework](https://www.django-rest-framework.org); \
+[Celery](https://docs.celeryq.dev/en/stable/); \
 [Django Debug Toolbar](https://pypi.org/project/django-debug-toolbar/); \
 [Django Simple Captcha](https://pypi.org/project/django-simple-captcha/); \
 [Django CKEditor](https://pypi.org/project/django-ckeditor/); \
@@ -15,7 +16,7 @@
 
 Полный список можно посмотреть в фале `requirements.txt`.
 
-База данных [PostgreSQL](https://www.postgresql.org/).
+Базs данных [PostgreSQL](https://www.postgresql.org/) и [Redis](https://redis.io/) в качестве брокера сообщений для Celery.
 
 ### Описание Models
 ##### Приложение "blog"

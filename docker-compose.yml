@@ -2,6 +2,10 @@ version: "3.8"
 
 services:
 
+  redis:
+    image: redis
+    restart: always
+
   website:
     build: .
     container_name: django_blog
@@ -12,6 +16,10 @@ services:
       - env.dev
     depends_on:
       - postgres_db
+
+  worker:
+    build: .
+    command: celery -A website worker -l INFO
 
   postgres_db:
     image: postgres:15.2-alpine
