@@ -3,12 +3,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q
-from django.core.mail import mail_admins
+# from django.core.mail import mail_admins
 from django.core.cache import cache
 
 from website.settings import ALL_CATEGORIES, PAGINATE_BY_CONST
 from .models import Post, Category
 from .forms import PostForm, CategoryForm, SendToStaffForm
+from .tasks import task_email_to_admin
 
 
 class HomeView(ListView):
@@ -181,8 +182,9 @@ def send_email_to_staff(request):
         form = SendToStaffForm(request.POST)
         if form.is_valid():
             msg = form.cleaned_data['body'] + '\n' + request.user.email
-            mail_admins(form.cleaned_data['title'], msg,
-                        fail_silently=False, connection=None, html_message=None)
+            # mail_admins(form.cleaned_data['title'], msg,
+            #             fail_silently=False, connection=None, html_message=None)
+            task_email_to_admin.delay(form.cleaned_data['title'], msg)
             return redirect('send-email-success')
     else:
         form = SendToStaffForm()

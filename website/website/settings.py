@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = getenv('SECRET_KEY')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
@@ -83,11 +83,11 @@ WSGI_APPLICATION = 'website.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': getenv('POSTGRES_DB'),
-        'USER': getenv('POSTGRES_USER'),
-        'PASSWORD': getenv('POSTGRES_PASSWORD'),
-        'HOST': getenv('SQL_HOST'),
-        'PORT': getenv('SQL_PORT'),
+        'NAME': getenv('POSTGRES_DB', 'postgres'),
+        'USER': getenv('POSTGRES_USER', 'postgres'),
+        'PASSWORD': getenv('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': getenv('SQL_HOST', 'localhost'),
+        'PORT': getenv('SQL_PORT', 5432),
     }
 }
 
@@ -161,8 +161,8 @@ CACHES = {
 }
 
 # настраиваем отправку писем
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # выводит в командной строке
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # отправляет на почтовый сервер
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # выводит в командной строке
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # отправляет на почтовый сервер
 DEFAULT_FROM_EMAIL = 'blog@mail.ru'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
@@ -258,3 +258,16 @@ CKEDITOR_CONFIGS = {
         'width': 'full',    # работает при добавлении CSS стилей
     },
 }
+
+
+# настройки Celery и Radis
+REDIS_HOST = 'redis'  # в докер контейнере
+# REDIS_HOST = '0.0.0.0'  # локально
+REDIS_PORT = '6379'
+
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
